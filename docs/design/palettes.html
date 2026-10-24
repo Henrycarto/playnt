@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Playnt palettes</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; padding: 32px; background: #FFFFFF; color: #1C1D17; font-family: 'Atkinson Hyperlegible Next', sans-serif; font-size: 14px; line-height: 20px; font-variant-numeric: tabular-nums; }
+  h1 { font-size: 24px; line-height: 32px; margin: 0 0 4px; }
+  .lede { color: #54564B; margin: 0 0 24px; max-width: 80ch; }
+  .opt { display: grid; grid-template-columns: 280px 1fr 1fr; gap: 16px; padding: 24px 0; border-top: 1px solid #D8D9D0; }
+  .opt h2 { font-size: 20px; line-height: 28px; margin: 0; }
+  .opt p { margin: 4px 0 16px; color: #54564B; }
+  .sw { display: grid; grid-template-columns: 24px 1fr auto; gap: 4px 8px; align-items: center; font-size: 12px; line-height: 16px; }
+  .sw i { width: 24px; height: 24px; border: 1px solid rgba(0,0,0,.2); border-radius: 3px; }
+  .aa { margin-top: 12px; font-size: 12px; line-height: 16px; color: #54564B; }
+  .shot { border: 1px solid #D8D9D0; border-radius: 4px; overflow: hidden; }
+  .shot img { display: block; width: 100%; }
+  .cap { font-size: 12px; color: #54564B; margin-top: 4px; }
+</style>
+</head>
+<body>
+<h1>Playnt palette options</h1>
+<p class="lede">Three palettes on the same queue. Status colours are shared: red for a possible serious incident or an overdue deadline, amber for a deadline under two days or manual triage. Every status also has text and an icon. All listed pairs pass WCAG 2.2 AA in light and dark.</p>
+<div id="opts"></div>
+<script type="module">
+import { palettes, checks, contrast } from './tokens.js';
+const keys = ['bg', 'panel', 'ink', 'ink2', 'accent', 'accentTint'];
+document.getElementById('opts').innerHTML = Object.entries(palettes).map(([k, p]) => {
+  const worst = (m) => { const t = p[m]; const r = checks.filter(([, , min]) => min === 4.5).map(([a, b]) => contrast(t[a], t[b])); return Math.min(...r).toFixed(2); };
+  const ui = (m) => { const t = p[m]; return Math.min(...checks.filter(([, , min]) => min === 3).map(([a, b]) => contrast(t[a], t[b]))).toFixed(2); };
+  const sw = (m) => keys.map((x) => `<i style="background:${p[m][x]}"></i><span>${x}</span><span>${p[m][x]}</span>`).join('');
+  return `<section class="opt"><div><h2>${p.name}</h2><p>${p.idea}</p>
+    <div class="sw">${sw('light')}</div><div class="aa">Light: lowest text pair ${worst('light')}:1, lowest UI line ${ui('light')}:1</div>
+    <div class="sw" style="margin-top:12px">${sw('dark')}</div><div class="aa">Dark: lowest text pair ${worst('dark')}:1, lowest UI line ${ui('dark')}:1</div></div>
+    <div><div class="shot"><img src="shots/pal-${k}-light.png" alt="${p.name} light queue"></div><div class="cap">Light</div></div>
+    <div><div class="shot"><img src="shots/pal-${k}-dark.png" alt="${p.name} dark queue"></div><div class="cap">Dark</div></div></section>`;
+}).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+{
+  "_note": "Synthetic demo data for the fictional Orrowell Medical GmbH. Not part of the evaluation set. 'expected' is what the seeded quality engineer decides; if the recorded model suggestion differs, the seed records a correction with the given reason.",
+  "history": [
+    {
+      "device": "IV-220",
+      "awarenessDate": "2026-02-10",
+      "reporterRole": "Ward nurse",
+      "channel": "phone",
+      "text": "The occlusion alarm on our IV-220 sounded repeatedly with no occlusion found. We changed the line and the cassette and it carried on, so the pump was swapped.",
+      "expected": "complaint",
+      "basis": "Nuisance alarm, infusion continued on another pump. No path to serious harm described."
+    },
+    {
+      "device": "IV-220",
+      "awarenessDate": "2026-03-24",
+      "reporterRole": "Biomedical engineer",
+      "channel": "email",
+      "text": "The cassette door latch on the IV-220 is stiff and needs two hands to close. The pump works normally once it is closed.",
+      "expected": "complaint",
+      "basis": "Usability complaint, device works as specified."
+    },
+    {
+      "device": "IV-220",
+      "awarenessDate": "2026-05-06",
+      "reporterRole": "Charge nurse",
+      "channel": "web form",
+      "text": "False occlusion alarms on two IV-220 pumps, several times per shift. Each time the line is clear and the infusion restarts without problems.",
+      "expected": "complaint",
+      "basis": "Nuisance alarms, no interruption long enough to matter."
+    },
+    {
+      "device": "IV-220",
+      "awarenessDate": "2026-06-23",
+      "reporterRole": "Night nurse",
+      "channel": "web form",
+      "text": "The IV-220 display backlight flickers in the dark. The numbers are still readable.",
+      "expected": "complaint",
+      "basis": "Cosmetic display fault, readable."
+    },
+    {
+      "device": "IV-220",
+      "awarenessDate": "2026-08-12",
+      "reporterRole": "Cardiology ward manager",
+      "channel": "email",
+      "text": "Four IV-220 pumps on our cardiology ward now give false occlusion alarms. Staff check the line, find nothing and restart the infusion.",
+      "expected": "complaint",
+      "basis": "Recurring nuisance alarms; a trend signal, not a serious incident."
+    },
+    {
+      "device": "IV-220",
+      "awarenessDate": "2026-09-08",
+      "reporterRole": "Ward nurse",
+      "channel": "phone",
+      "text": "The 5 key on one IV-220 sticks and has to be pressed twice. We notice it at programming every time and check the rate before starting.",
+      "expected": "might_have_led",
+      "basis": "A sticking digit key could lead to a wrong rate if not noticed; might lead to serious deterioration."
+    },
+    {
+      "device": "PX-40",
+      "awarenessDate": "2026-02-24",
+      "reporterRole": "Patient",
+      "channel": "web form",
+      "text": "The PX-40 display has scratched after one month and is hard to read in daylight.",
+      "expected": "complaint",
+      "basis": "Durability complaint."
+    },
+    {
+      "device": "PX-40",
+      "awarenessDate": "2026-04-14",
+      "reporterRole": "Patient",
+      "channel": "email",
+      "text": "The battery cover of my PX-40 cracked the first time I opened it to change the batteries.",
+      "expected": "complaint",
+      "basis": "Durability complaint."
+    },
+    {
+      "device": "PX-40",
+      "awarenessDate": "2026-05-27",
+      "reporterRole": "Practice nurse",
+      "channel": "email",
+      "text": "Readings on the PX-40 take more than a minute to settle on patients with cold hands. We wait for a stable value before writing it down.",
+      "expected": "complaint",
+      "basis": "Slow reading with low perfusion, noticed and handled. Not serious."
+    },
+    {
+      "device": "PX-40",
+      "awarenessDate": "2026-07-02",
+      "reporterRole": "Patient",
+      "channel": "web form",
+      "text": "The display of my PX-40 scratched within weeks and is hard to see outdoors.",
+      "expected": "complaint",
+      "basis": "Durability complaint."
+    },
+    {
+      "device": "PX-40",
+      "awarenessDate": "2026-08-25",
+      "reporterRole": "Pharmacist",
+      "channel": "phone",
+      "text": "A customer's PX-40 battery cover cracked at the hinge and the batteries fall out.",
+      "expected": "complaint",
+      "basis": "Durability complaint."
+    },
+    {
+      "device": "PX-40",
+      "awarenessDate": "2026-09-15",
+      "reporterRole": "Community nurse",
+      "channel": "phone",
+      "text": "The PX-40 showed 99 percent on a patient whose bedside monitor showed 86 percent at the same time. I used the monitor value and started oxygen.",
+      "expected": "might_have_led",
+      "basis": "A falsely normal reading might lead to delayed treatment if relied on."
+    },
+    {
+      "device": "HB-7",
+      "awarenessDate": "2026-03-03",
+      "reporterRole": "Home carer",
+      "channel": "phone",
+      "text": "The HB-7 handset cable has cracked where it enters the handset. The bed still works.",
+      "expected": "complaint",
+      "basis": "Wear on a cable; anticipated harm needs a damaged handset to cause movement, none reported."
+    },
+    {
+      "device": "HB-7",
+      "awarenessDate": "2026-04-28",
+      "reporterRole": "Nursing home manager",
+      "channel": "email",
+      "text": "The HB-7 motor is noisy when raising the head end. It works otherwise.",
+      "expected": "complaint",
+      "basis": "Noise complaint."
+    },
+    {
+      "device": "HB-7",
+      "awarenessDate": "2026-06-09",
+      "reporterRole": "Physiotherapist",
+      "channel": "email",
+      "text": "The castor brakes on an HB-7 do not hold on our tiled floor. The bed rolls when staff lean on it during transfers.",
+      "expected": "might_have_led",
+      "basis": "A rolling bed during transfer might lead to a fall with serious injury."
+    },
+    {
+      "device": "HB-7",
+      "awarenessDate": "2026-07-21",
+      "reporterRole": "Home care coordinator",
+      "channel": "email",
+      "text": "The handset cables on two HB-7 beds have split near the plug. No malfunction so far.",
+      "expected": "complaint",
+      "basis": "Cable wear, no movement fault."
+    },
+    {
+      "device": "HB-7",
+      "awarenessDate": "2026-09-01",
+      "reporterRole": "Nursing home nurse",
+      "channel": "phone",
+      "text": "An HB-7 bed lowered itself by about 10 cm overnight. The resident was unhurt. The handset cable was found crushed under the bed frame.",
+      "expected": "might_have_led",
+      "basis": "Uncommanded movement, an anticipated harm, that might lead to entrapment or a fall."
+    },
+    {
+      "device": "WD-12",
+      "awarenessDate": "2026-02-17",
+      "reporterRole": "Community nurse",
+      "channel": "phone",
+      "text": "WD-12 dressings come loose at the edges after a day on the sacrum.",
+      "expected": "complaint",
+      "basis": "Adhesion complaint."
+    },
+    {
+      "device": "WD-12",
+      "awarenessDate": "2026-03-31",
+      "reporterRole": "Community nurse",
+      "channel": "email",
+      "text": "Mild redness around the wound after a week of WD-12, gone two days after we stopped. No treatment needed.",
+      "expected": "complaint",
+      "basis": "Expected, documented side-effect, not serious."
+    },
+    {
+      "device": "WD-12",
+      "awarenessDate": "2026-05-19",
+      "reporterRole": "Tissue viability nurse",
+      "channel": "email",
+      "text": "WD-12 dressing edges roll up on heel wounds within a few hours.",
+      "expected": "complaint",
+      "basis": "Adhesion complaint."
+    },
+    {
+      "device": "WD-12",
+      "awarenessDate": "2026-07-14",
+      "reporterRole": "Nursing home nurse",
+      "channel": "web form",
+      "text": "Mild skin irritation under the WD-12 on two residents. It settled after we switched dressing.",
+      "expected": "complaint",
+      "basis": "Expected, documented side-effect, not serious."
+    },
+    {
+      "device": "WD-12",
+      "awarenessDate": "2026-08-18",
+      "reporterRole": "Community nurse",
+      "channel": "phone",
+      "text": "The WD-12 adhesive border loses its grip after showering, so the dressing has to be changed every day.",
+      "expected": "complaint",
+      "basis": "Adhesion complaint."
+    },
+    {
+      "device": "WD-12",
+      "awarenessDate": "2026-09-22",
+      "reporterRole": "Practice nurse",
+      "channel": "email",
+      "text": "The WD-12 peel tab tears off before the liner comes away, so staff end up touching the wound side of the dressing.",
+      "expected": "complaint",
+      "basis": "Usability complaint; contamination risk is low and not described as causing harm."
+    },
+    {
+      "device": "NB-3",
+      "awarenessDate": "2026-02-03",
+      "reporterRole": "Patient",
+      "channel": "email",
+      "text": "My NB-3 mouthpiece faded from blue to grey after cleaning it as the leaflet says. It still works.",
+      "expected": "complaint",
+      "basis": "Cosmetic complaint."
+    },
+    {
+      "device": "NB-3",
+      "awarenessDate": "2026-04-07",
+      "reporterRole": "Parent",
+      "channel": "phone",
+      "text": "After three months each NB-3 treatment takes twice as long as when it was new, even though we clean the mesh as instructed.",
+      "expected": "complaint",
+      "basis": "Reduced output noticed through longer treatment time; dose still delivered."
+    },
+    {
+      "device": "NB-3",
+      "awarenessDate": "2026-06-02",
+      "reporterRole": "Patient",
+      "channel": "web form",
+      "text": "The NB-3 charging cable stopped working after a month.",
+      "expected": "complaint",
+      "basis": "Accessory durability."
+    },
+    {
+      "device": "NB-3",
+      "awarenessDate": "2026-07-28",
+      "reporterRole": "Patient",
+      "channel": "email",
+      "text": "The NB-3 mist is weak after two months. Cleaning the mesh helped only for a day or two.",
+      "expected": "complaint",
+      "basis": "Reduced output, a trend signal."
+    },
+    {
+      "device": "NB-3",
+      "awarenessDate": "2026-09-29",
+      "reporterRole": "Patient",
+      "channel": "web form",
+      "text": "The zip on the NB-3 carry case broke.",
+      "expected": "complaint",
+      "basis": "Accessory complaint."
+    }
+  ],
+  "queue": [
+    {
+      "device": "WD-12",
+      "awarenessDate": "2026-10-09",
+      "receivedAt": "2026-10-09T08:20:00Z",
+      "reporterRole": "Wound care nurse",
+      "channel": "phone",
+      "text": "A patient with a venous leg ulcer developed redness spreading up the calf two days after the WD-12 dressing was applied. The GP admitted him to hospital for intravenous antibiotics. Dressing changes followed the instructions.",
+      "decision": {
+        "action": "confirm",
+        "at": "2026-10-12T07:45:00Z"
+      },
+      "reportedOn": "2026-10-14"
+    },
+    {
+      "device": "IV-220",
+      "awarenessDate": "2026-10-15",
+      "receivedAt": "2026-10-15T13:05:00Z",
+      "reporterRole": "ICU charge nurse",
+      "channel": "phone",
+      "text": "A noradrenaline infusion ran dry on the IV-220 and the end-of-infusion alarm never sounded. The patient's blood pressure dropped, he went into cardiac arrest and could not be resuscitated. The pump is quarantined for investigation.",
+      "decision": {
+        "action": "confirm",
+        "at": "2026-10-15T14:10:00Z"
+      }
+    },
+    {
+      "device": "PX-40",
+      "awarenessDate": "2026-10-16",
+      "receivedAt": "2026-10-16T09:30:00Z",
+      "reporterRole": "Patient",
+      "channel": "web form",
+      "text": "The lanyard eyelet on the PX-40 snapped after two weeks. The oximeter itself works fine.",
+      "decision": {
+        "action": "confirm",
+        "at": "2026-10-19T08:00:00Z"
+      }
+    },
+    {
+      "device": "HB-7",
+      "awarenessDate": "2026-10-19",
+      "receivedAt": "2026-10-19T06:50:00Z",
+      "reporterRole": "Nursing home nurse",
+      "channel": "phone",
+      "text": "The side rail latch on an HB-7 bed released when the resident leaned against it during the night. The carer was in the room and caught her before she fell. The latch now opens with very light pressure.",
+      "decision": null
+    },
+    {
+      "device": "IV-220",
+      "awarenessDate": "2026-10-20",
+      "receivedAt": "2026-10-20T10:15:00Z",
+      "reporterRole": "Ward nurse",
+      "channel": "email",
+      "text": "During programming the IV-220 keypad registered 50 mL/h as 500 mL/h. The nurse caught it on the second-person check before starting. A second pump on the same ward did the same thing later that day.",
+      "decision": {
+        "action": "confirm",
+        "at": "2026-10-21T08:30:00Z"
+      }
+    },
+    {
+      "device": "NB-3",
+      "awarenessDate": "2026-10-13",
+      "receivedAt": "2026-10-13T15:40:00Z",
+      "reporterRole": "Patient",
+      "channel": "web form",
+      "text": "The charging light on my NB-3 stays orange even when the battery is full. Treatment works normally.",
+      "decision": null
+    },
+    {
+      "device": "NB-3",
+      "awarenessDate": "2026-10-23",
+      "receivedAt": "2026-10-23T14:40:00Z",
+      "reporterRole": "Community pharmacist",
+      "channel": "phone",
+      "text": "Our pharmacy has had three calls this week from home users of the NB-3, all with devices from lot NB3-2610. The medication reservoir cracks at the seam and the solution runs onto the face mask during treatment. Two users had the solution in their eyes and needed eye irrigation at A&E. A third user stopped treatment. We have taken the remaining stock from this lot off the shelf.",
+      "decision": {
+        "action": "correct",
+        "at": "2026-10-25T08:30:00Z",
+        "triage": {
+          "isComplaint": true,
+          "possibleSeriousIncident": true,
+          "seriousOutcome": "serious_deterioration_unanticipated",
+          "timeLimitDays": 10,
+          "problemDescription": "Medication reservoir cracks at the seam",
+          "evidenceQuote": "Two users had the solution in their eyes and needed eye irrigation at A&E.",
+          "rationale": "Emergency eye irrigation is medical intervention to prevent impairment; reservoir cracking is not in the NB-3 risk file."
+        },
+        "reason": "Two users needed emergency eye irrigation, which is a serious deterioration under MDCG 2023-3 Q2. Reservoir cracking is not among the NB-3 anticipated harms, so it is unanticipated: 10 days under Art. 87(5). Three reports from one lot with stock already quarantined do not show an imminent risk of multiple deaths or a wider public health hazard, so not a serious public health threat. Lot investigation opened."
+      }
+    },
+    {
+      "device": "WD-12",
+      "awarenessDate": "2026-10-24",
+      "receivedAt": "2026-10-24T11:05:00Z",
+      "reporterRole": "Ward sister",
+      "channel": "email",
+      "record": false,
+      "text": "Dressing edges lifted within a few hours on three patients on our ward, and one wound bed looked macerated at the next change. All from the same box, lot WD12-2610.",
+      "decision": null
+    },
+    {
+      "device": "HB-7",
+      "awarenessDate": "2026-10-25",
+      "receivedAt": "2026-10-25T07:20:00Z",
+      "reporterRole": "Home carer",
+      "channel": "email",
+      "text": "Does the warranty on the HB-7 cover a replacement holder for the handset? Ours went missing during a move.",
+      "decision": null
+    }
+  ],
+  "samples": [
+    {
+      "device": "IV-220",
+      "reporterRole": "Paediatric nurse",
+      "channel": "phone",
+      "text": "The IV-220 kept running for about 15 minutes after I pressed stop. A paediatric patient received an extra 8 mL of potassium chloride and needed cardiac monitoring overnight. The pump has been taken out of service."
+    },
+    {
+      "device": "PX-40",
+      "reporterRole": "Patient",
+      "channel": "email",
+      "text": "Could you send me the PX-40 user manual in German? I lost the printed one."
+    },
+    {
+      "device": "HB-7",
+      "reporterRole": "Home carer",
+      "channel": "web form",
+      "text": "The HB-7 head section makes a clicking noise when it is raised. It still moves smoothly."
+    }
+  ]
+}

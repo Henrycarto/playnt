@@ -1,0 +1,13 @@
+{
+  "_note": "Development set for prompt work. Never part of the evaluation. Same devices and labelling rules as the frozen set.",
+  "items": [
+    { "id": "DEV-1", "device": "IV-220", "awarenessDate": "2026-04-20", "text": "The IV-220 showed the infusion as complete but about 100 mL was still in the bag. The patient's antibiotic dose was short. No clinical effect noticed so far.", "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15 } },
+    { "id": "DEV-2", "device": "PX-40", "awarenessDate": "2026-05-04", "text": "Please confirm whether the PX-40 can be cleaned with alcohol wipes.", "label": { "isComplaint": false, "possibleSeriousIncident": false, "timeLimitDays": null } },
+    { "id": "DEV-3", "device": "HB-7", "awarenessDate": "2026-05-11", "text": "A resident's arm slipped between the side rail bars and was trapped until staff freed it. She has a large bruise and was seen by the doctor, who ordered an X-ray; no fracture.", "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15 } },
+    { "id": "DEV-4", "device": "WD-12", "awarenessDate": "2026-06-15", "text": "The WD-12 boxes we received have labels in Dutch only. The dressings inside look normal.", "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null } },
+    { "id": "DEV-5", "device": "NB-3", "awarenessDate": "2026-06-22", "text": "During use the NB-3 became very hot near the battery and burned my daughter's hand. She has a blister and we went to the GP, who dressed it.", "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15 } },
+    { "id": "DEV-6", "device": "IV-220", "awarenessDate": "2026-07-06", "text": "An IV-220 delivered a full syringe of insulin in under a minute when the line was opened. The patient became hypoglycaemic, lost consciousness and needed intravenous glucose. Cause not yet known.", "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 10 } },
+    { "id": "DEV-7", "device": "PX-40", "awarenessDate": "2026-07-13", "text": "Love the PX-40, it is so easy to use. Do you make one for children?", "label": { "isComplaint": false, "possibleSeriousIncident": false, "timeLimitDays": null } },
+    { "id": "DEV-8", "device": "HB-7", "awarenessDate": "2026-08-03", "text": "The HB-7 raises very slowly and makes a grinding noise. We have stopped using it until it is checked.", "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null } }
+  ]
+}

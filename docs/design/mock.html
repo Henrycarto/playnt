@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playnt mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+    font-size: 14px; line-height: 20px; color: var(--ink); background: var(--bg);
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+  }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .app { display: grid; grid-template-columns: 208px 1fr; min-height: 100vh; }
+  .side { border-right: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; padding: 20px 12px 16px; }
+  .brand { font-size: 20px; line-height: 28px; font-weight: 700; letter-spacing: -0.01em; padding: 0 8px 20px; }
+  .nav a { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 4px; color: var(--ink2); text-decoration: none; }
+  .nav a[aria-current="page"] { background: var(--accentTint); color: var(--ink); font-weight: 600; }
+  .nav a .count { margin-left: auto; color: var(--ink3); font-size: 12px; }
+  .side .sim { margin-top: auto; padding: 12px 8px 0; border-top: 1px solid var(--line); font-size: 12px; line-height: 16px; color: var(--ink3); }
+  .side .who { padding: 12px 8px 0; font-size: 12px; line-height: 16px; color: var(--ink2); }
+
+  main { min-width: 0; padding: 24px 32px 40px; }
+  .head { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 16px; }
+  h1 { font-size: 24px; line-height: 32px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .head .sub { color: var(--ink2); }
+  .head .spacer { flex: 1; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 16px; border-radius: 4px; border: 1px solid var(--lineStrong); background: var(--panel); cursor: pointer; font-weight: 600; white-space: nowrap; }
+  .btn.primary { background: var(--accent); color: var(--onAccent); border-color: var(--accent); }
+  .btn.quiet { border-color: transparent; background: transparent; color: var(--ink2); font-weight: 500; }
+
+  .filters { display: flex; align-items: center; gap: 8px; padding: 8px; border: 1px solid var(--line); border-bottom: 0; border-radius: 6px 6px 0 0; background: var(--panel); flex-wrap: wrap; }
+  .select { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px 0 12px; border: 1px solid var(--lineStrong); border-radius: 4px; background: var(--panel); }
+  .select b { font-weight: 600; }
+  .check { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px; }
+  .box { width: 16px; height: 16px; border: 1px solid var(--lineStrong); border-radius: 3px; display: inline-grid; place-items: center; }
+  .box.on { background: var(--accent); border-color: var(--accent); color: var(--onAccent); }
+  .filters .sort { margin-left: auto; color: var(--ink2); }
+
+  table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 0 0 6px 6px; }
+  th { text-align: left; font-weight: 600; font-size: 12px; line-height: 16px; color: var(--ink2); padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--sunken); white-space: nowrap; }
+  td { padding: 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  tbody tr:hover td { background: var(--sunken); }
+  .id { font-weight: 600; white-space: nowrap; }
+  .meta { color: var(--ink3); font-size: 12px; line-height: 16px; }
+  .summary { max-width: 46ch; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .nowrap { white-space: nowrap; }
+
+  .flag { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; font-size: 12px; line-height: 16px; padding: 2px 8px 2px 6px; border-radius: 3px; white-space: nowrap; border: 1px solid; }
+  .flag.serious { color: var(--serious); background: var(--seriousTint); border-color: var(--seriousLine); }
+  .flag.none { color: var(--ink3); border-color: transparent; padding-left: 0; font-weight: 500; }
+  .tri { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .tri.suggested { color: var(--ink2); }
+  .tri.suggested .chip { border: 1px dashed var(--lineStrong); }
+  .tri .chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 3px; border: 1px solid var(--line); font-size: 12px; line-height: 16px; font-weight: 600; }
+  .tri.manual .chip { color: var(--warn); background: var(--warnTint); border-color: var(--warnLine); }
+
+  .due { display: grid; gap: 4px; min-width: 188px; }
+  .due .when { display: flex; gap: 8px; align-items: baseline; }
+  .due .left { font-weight: 700; }
+  .due.soon .left { color: var(--warn); }
+  .due.over .left { color: var(--serious); }
+  .due .none { color: var(--ink3); }
+  .track { display: flex; gap: 2px; height: 8px; }
+  .track i { flex: 0 0 auto; width: 8px; height: 8px; border-radius: 1px; border: 1px solid var(--lineStrong); }
+  .track i.past { background: var(--ink3); border-color: var(--ink3); }
+  .due.soon .track i.past { background: var(--warn); border-color: var(--warn); }
+  .due.over .track i.past { background: var(--serious); border-color: var(--serious); }
+  .track i.rest:not(.past) { background: repeating-linear-gradient(135deg, var(--lineStrong) 0 1px, transparent 1px 3px); }
+  .track i.today { outline: 1px solid var(--ink); outline-offset: 1px; }
+  .track i.ext { border-style: dashed; }
+  .over-badge { display: inline-flex; align-items: center; gap: 4px; background: var(--overdueFill); color: var(--overdueText); font-weight: 700; font-size: 12px; line-height: 16px; padding: 2px 8px; border-radius: 3px; }
+
+  /* detail */
+  .crumb { color: var(--ink2); text-decoration: none; display: inline-flex; gap: 6px; align-items: center; margin-bottom: 12px; }
+  .dhead { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 4px; }
+  .dhead h1 { margin-right: 4px; }
+  .dsub { color: var(--ink2); margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 20px; align-items: start; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; }
+  .panel > h2 { font-size: 14px; line-height: 20px; font-weight: 700; margin: 0; padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; gap: 8px; align-items: center; }
+  .panel > h2 .r { margin-left: auto; font-weight: 500; color: var(--ink3); font-size: 12px; }
+  .pbody { padding: 16px; }
+  .stack { display: grid; gap: 20px; }
+
+  .clock { display: grid; grid-template-columns: auto 1fr; gap: 4px 24px; align-items: end; }
+  .clock .big { font-size: 36px; line-height: 40px; font-weight: 700; letter-spacing: -0.02em; }
+  .clock .big.soon { color: var(--warn); }
+  .clock .big.over { color: var(--serious); }
+  .clock .big small { font-size: 18px; font-weight: 600; letter-spacing: 0; }
+  .clock .dueline { font-size: 16px; line-height: 24px; font-weight: 600; }
+  .clock .state { color: var(--ink2); }
+  .bigtrack { display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: 4px; margin: 16px 0 8px; }
+  .bigtrack .d { border: 1px solid var(--lineStrong); border-radius: 3px; padding: 4px 6px; min-height: 52px; display: grid; align-content: space-between; font-size: 12px; line-height: 16px; }
+  .bigtrack .d b { font-weight: 700; }
+  .bigtrack .d.past { background: var(--sunken); color: var(--ink2); }
+  .bigtrack .d.today { outline: 2px solid var(--ink); outline-offset: 1px; }
+  .bigtrack .d.rest { background: repeating-linear-gradient(135deg, var(--line) 0 1px, transparent 1px 5px); color: var(--ink2); }
+  .bigtrack .d.due { background: var(--warnTint); border-color: var(--warn); color: var(--ink); }
+  .bigtrack .d.ext { border-style: dashed; }
+  .why { margin: 8px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; color: var(--ink2); }
+  .why li { position: relative; padding-left: 20px; }
+  .why li::before { content: ''; position: absolute; left: 4px; top: 7px; width: 6px; height: 6px; background: var(--ink3); border-radius: 1px; }
+  .note { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; line-height: 16px; color: var(--ink3); }
+
+  .complaint { font-size: 16px; line-height: 26px; max-width: 68ch; margin: 0; }
+  mark { background: var(--accentTint); color: var(--ink); box-shadow: inset 0 -2px 0 var(--accent); padding: 0 2px; border-radius: 2px; }
+  dl.facts { display: grid; grid-template-columns: 160px 1fr; gap: 8px 16px; margin: 16px 0 0; padding-top: 16px; border-top: 1px solid var(--line); }
+  dl.facts dt { color: var(--ink2); }
+  dl.facts dd { margin: 0; }
+
+  .sugg { border: 1px dashed var(--lineStrong); }
+  .sugg .src { font-size: 12px; line-height: 16px; color: var(--ink3); }
+  .field { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .field:last-of-type { border-bottom: 0; }
+  .field .v { font-weight: 700; text-align: right; }
+  .field .v.serious { color: var(--serious); }
+  .quote { margin: 12px 0 0; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--sunken); }
+  .rationale { margin: 12px 0 0; color: var(--ink2); }
+  .actions { display: flex; gap: 8px; padding: 16px; border-top: 1px solid var(--line); }
+  .actions .btn { flex: 1; justify-content: center; }
+
+  .term { text-decoration: underline dotted var(--ink3); text-underline-offset: 3px; cursor: help; position: relative; }
+  .tip { position: absolute; z-index: 5; left: -12px; top: calc(100% + 8px); width: 320px; background: var(--panel); color: var(--ink); border: 1px solid var(--lineStrong); border-radius: 4px; padding: 12px; font-size: 13px; line-height: 20px; font-weight: 400; text-align: left; box-shadow: 0 2px 0 var(--line); cursor: auto; }
+  .tip a { color: var(--accent); font-weight: 600; }
+  .tip .k { display: block; margin-top: 8px; color: var(--ink3); font-size: 12px; line-height: 16px; }
+
+  .audit { list-style: none; margin: 0; padding: 0; }
+  .audit li { display: grid; grid-template-columns: 24px 1fr; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .audit li:last-child { border-bottom: 0; }
+  .audit .n { width: 24px; height: 24px; border: 1px solid var(--lineStrong); border-radius: 3px; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--ink2); }
+  .audit li.pending .n { border-style: dashed; }
+  .audit .what { font-weight: 600; }
+  .audit .hash { color: var(--ink3); font-size: 12px; }
+
+  form.correct { padding: 16px; border-top: 1px solid var(--line); display: grid; gap: 16px; }
+  form.correct legend, form.correct label.l { font-weight: 600; display: block; margin-bottom: 6px; }
+  form.correct fieldset { border: 0; margin: 0; padding: 0; }
+  .seg { display: inline-flex; border: 1px solid var(--lineStrong); border-radius: 4px; overflow: hidden; }
+  .seg span { padding: 6px 14px; border-right: 1px solid var(--lineStrong); }
+  .seg span:last-child { border-right: 0; }
+  .seg span.on { background: var(--accent); color: var(--onAccent); font-weight: 600; }
+  .input { width: 100%; border: 1px solid var(--lineStrong); border-radius: 4px; background: var(--panel); padding: 8px 12px; min-height: 36px; }
+  textarea.input { min-height: 72px; resize: vertical; }
+  .input.err { border-color: var(--serious); box-shadow: inset 0 0 0 1px var(--serious); }
+  .errmsg { color: var(--serious); font-weight: 600; font-size: 12px; line-height: 16px; display: flex; gap: 4px; align-items: center; margin-top: 6px; }
+  .hint { color: var(--ink3); font-size: 12px; line-height: 16px; margin-top: 4px; }
+
+  @media (max-width: 1360px) {
+    .app { grid-template-columns: 184px 1fr; }
+    main { padding: 20px 24px 32px; }
+    .grid { grid-template-columns: minmax(0, 1fr) 360px; }
+    .summary { max-width: 34ch; }
+    .col-received { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="module">
+import { palettes } from './tokens.js';
+
+const q = new URLSearchParams(location.search);
+const screen = q.get('screen') || 'queue';
+const pal = palettes[q.get('palette') || 'ledger'];
+const theme = q.get('theme') || 'light';
+const state = q.get('state') || '';
+for (const [k, v] of Object.entries(pal[theme])) document.documentElement.style.setProperty('--' + k, v);
+document.documentElement.style.colorScheme = theme;
+
+// Deadline rules: MDR Art. 87(3) to (5), MDCG 2023-3 Rev.2 Q14, Regulation 1182/71 Art. 3, Austrian ARG section 7(2).
+const DAY = 86400000;
+const d = (s) => new Date(s + 'T00:00:00Z');
+const iso = (t) => t.toISOString().slice(0, 10);
+const HOLIDAYS = new Map([
+  ['2026-01-01', 'New Year'], ['2026-01-06', 'Epiphany'], ['2026-04-06', 'Easter Monday'], ['2026-05-01', 'State holiday'],
+  ['2026-05-14', 'Ascension Day'], ['2026-05-25', 'Whit Monday'], ['2026-06-04', 'Corpus Christi'], ['2026-08-15', 'Assumption'],
+  ['2026-10-26', 'National Day'], ['2026-11-01', 'All Saints'], ['2026-12-08', 'Immaculate Conception'], ['2026-12-25', 'Christmas'], ['2026-12-26', "St Stephen's Day"],
+]);
+const isRest = (t) => [0, 6].includes(t.getUTCDay()) || HOLIDAYS.has(iso(t));
+const restName = (t) => HOLIDAYS.get(iso(t)) || (t.getUTCDay() === 0 ? 'Sunday' : 'Saturday');
+function deadline(aware, n) {
+  const a = d(aware); let end = new Date(+a + n * DAY); const legal = new Date(end);
+  while (isRest(end)) end = new Date(+end + DAY);
+  const working = () => { let c = 0; for (let t = +a + DAY; t <= +end; t += DAY) if (!isRest(new Date(t))) c++; return c; };
+  if (n >= 2) while (working() < 2 || isRest(end)) end = new Date(+end + DAY);
+  return { aware: a, legal, end, n };
+}
+const NOW = new Date('2026-10-25T09:00:00Z'); // Sun 25 Oct 2026, 10:00 Vienna
+const TODAY = d('2026-10-25');
+const fmtDay = (t) => t.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }).replace(',', '');
+function left(dl) {
+  const endMs = +dl.end + DAY - 1000 - 3600000; // 23:59:59 CET = 22:59:59 UTC
+  const ms = endMs - +NOW; const over = ms < 0; const a = Math.abs(ms);
+  const days = Math.floor(a / DAY), hours = Math.floor((a % DAY) / 3600000);
+  return { over, soon: !over && ms < 2 * DAY, text: over ? `${days} d ${hours} h overdue` : `${days} d ${hours} h left` };
+}
+
+const I = {
+  serious: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.75 14.75 13.5H1.25L8 1.75Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 6.25v3.5M8 11.4v.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  check: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 8.5 3.25 3.25L13 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  pen: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10.5 2.5 13.5 5.5 6 13H3v-3l7.5-7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+  dash: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="5.75" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2.5 2"/></svg>',
+  manual: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.75v4M8 11v.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  clock: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.5V8l2.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  back: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  plus: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>',
+  down: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  queue: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  log: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="3" y="2" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 6h4M6 9h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  trend: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 13.5h11M4 11V8M7 11V5M10 11V7M13 11V3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  audit: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 3.5h10M3 8h10M3 12.5h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="1.5 2.5"/></svg>',
+};
+
+const rows = [
+  { id: 'PLT-2026-0154', dev: 'WD-12 foam dressing', aware: '2026-10-24', n: null, flag: null, tri: 'manual', text: 'Dressing edges lifted within hours on three patients; one wound bed looked macerated at the next change.' },
+  { id: 'PLT-2026-0146', dev: 'WD-12 foam dressing', aware: '2026-10-09', n: 15, flag: 'serious', tri: 'confirmed', text: 'Patient with venous ulcer developed spreading cellulitis under the dressing, admitted for IV antibiotics.' },
+  { id: 'PLT-2026-0149', dev: 'IV-220 infusion pump', aware: '2026-10-15', n: 10, flag: 'serious', tri: 'confirmed', text: 'Vasopressor infusion ran dry with no end-of-infusion alarm. Patient became hypotensive, arrested and died.' },
+  { id: 'PLT-2026-0153', dev: 'NB-3 nebuliser', aware: '2026-10-23', n: 2, flag: 'serious', tri: 'suggested', text: 'Three home users of lot NB3-2610 report the reservoir cracking at the seam; two needed eye irrigation at A&E.' },
+  { id: 'PLT-2026-0152', dev: 'IV-220 infusion pump', aware: '2026-10-20', n: 10, flag: 'serious', tri: 'corrected', text: 'Keypad registered 50 as 500 during programming. Caught on double check; second pump on the ward did the same.' },
+  { id: 'PLT-2026-0151', dev: 'HB-7 care bed', aware: '2026-10-19', n: 15, flag: 'serious', tri: 'suggested', text: 'Side rail latch released when the resident leaned on it. Carer caught her before she fell.' },
+  { id: 'PLT-2026-0148', dev: 'NB-3 nebuliser', aware: '2026-10-13', n: null, flag: 'none', tri: 'suggested', text: 'Charging light stays orange even when the battery is full. Treatment works normally.' },
+  { id: 'PLT-2026-0150', dev: 'PX-40 pulse oximeter', aware: '2026-10-16', n: null, flag: 'none', tri: 'confirmed', text: 'Lanyard eyelet snapped after two weeks. Device fine.' },
+  { id: 'PLT-2026-0155', dev: 'HB-7 care bed', aware: '2026-10-25', n: null, flag: 'none', tri: 'suggested', text: 'Asks whether the warranty covers a replacement handset holder.', notComplaint: true },
+];
+
+function triCell(t) {
+  if (t === 'manual') return `<span class="tri manual"><span class="chip">${I.manual}Needs manual triage</span></span>`;
+  if (t === 'suggested') return `<span class="tri suggested"><span class="chip">${I.dash}Suggested</span></span>`;
+  if (t === 'confirmed') return `<span class="tri"><span class="chip">${I.check}Confirmed</span></span>`;
+  return `<span class="tri"><span class="chip">${I.pen}Corrected</span></span>`;
+}
+function dueCell(r) {
+  if (r.tri === 'manual') return `<div class="due"><span class="none">Limit not set until triaged</span><span class="meta">Awareness ${fmtDay(d(r.aware))}</span></div>`;
+  if (!r.n) return `<div class="due"><span class="none">${r.notComplaint ? 'Not a complaint' : 'No reporting limit'}</span><span class="meta">${r.notComplaint ? '' : 'Counts towards trends'}</span></div>`;
+  const dl = deadline(r.aware, r.n); const l = left(dl);
+  const cells = []; for (let t = +dl.aware + DAY; t <= +dl.end; t += DAY) {
+    const day = new Date(t); const c = [];
+    if (t < +TODAY) c.push('past'); if (t === +TODAY) c.push('today'); if (isRest(day)) c.push('rest'); if (t > +dl.legal) c.push('ext');
+    cells.push(`<i class="${c.join(' ')}"></i>`);
+  }
+  const cls = l.over ? 'over' : l.soon ? 'soon' : '';
+  const lead = l.over ? `<span class="over-badge">${I.clock}${l.text}</span>` : `<span class="left">${l.text}</span>`;
+  return `<div class="due ${cls}"><div class="when">${lead}</div><div class="track" aria-hidden="true">${cells.join('')}</div><span class="meta">Due ${fmtDay(dl.end)}${r.tri === 'suggested' ? ' if confirmed' : ''}</span></div>`;
+}
+const ART = { 2: '87(4)', 10: '87(5)', 15: '87(3)' };
+function limitCell(r) {
+  if (!r.n) return '<span class="meta">None</span>';
+  return `${r.n} days<div class="meta">Art. ${ART[r.n]}</div>`;
+}
+function flagCell(f) {
+  if (f === 'serious') return `<span class="flag serious">${I.serious}Possible serious incident</span>`;
+  if (f === 'none') return `<span class="flag none">Not serious</span>`;
+  return `<span class="flag none">Not assessed</span>`;
+}
+
+function shell(content, current) {
+  const nav = [['queue', 'Queue', I.queue, '9'], ['log', 'Log complaint', I.log, ''], ['trend', 'Trends', I.trend, ''], ['audit', 'Audit trail', I.audit, '']];
+  return `<div class="app"><aside class="side"><div class="brand">Playnt</div><nav class="nav" aria-label="Main">${nav.map(([k, l, ic, c]) => `<a href="#" ${k === current ? 'aria-current="page"' : ''}>${ic}${l}${c ? `<span class="count">${c}</span>` : ''}</a>`).join('')}</nav>
+  <div class="sim">Synthetic data. Not a validated quality management system.</div><div class="who">Signed in as Quality engineer (demo)<br>Orrowell Medical GmbH, fictional</div></aside><main>${content}</main></div>`;
+}
+
+function queue() {
+  const order = [...rows].sort((a, b) => {
+    const k = (r) => r.tri === 'manual' ? -1 : r.n ? +deadline(r.aware, r.n).end : 9e15 + +d(r.aware);
+    return k(a) - k(b);
+  });
+  return shell(`
+  <div class="head"><div><h1>Complaint queue</h1><div class="sub">9 open, 5 possible serious incidents, 2 waiting for your decision</div></div><span class="spacer"></span><button class="btn primary">${I.plus}Log complaint</button></div>
+  <div class="filters">
+    <span class="select">Triage <b>Open</b>${I.down}</span><span class="select">Device <b>All</b>${I.down}</span>
+    <label class="check"><span class="box"></span>Possible serious incidents only</label>
+    <span class="sort">Sorted by deadline, nearest first</span>
+  </div>
+  <table><thead><tr><th>Deadline</th><th>Flag</th><th>Complaint</th><th>Device</th><th>Limit</th><th>Triage</th><th class="col-received">Awareness</th></tr></thead>
+  <tbody>${order.map((r) => `<tr><td>${dueCell(r)}</td><td>${flagCell(r.flag)}</td><td><div class="id">${r.id}</div><div class="summary">${r.text}</div></td><td class="nowrap">${r.dev}</td><td class="nowrap">${limitCell(r)}</td><td>${triCell(r.tri)}</td><td class="col-received nowrap">${fmtDay(d(r.aware))}<div class="meta">2026</div></td></tr>`).join('')}</tbody></table>
+  <p class="meta" style="margin-top:12px">Deadlines use calendar days from the awareness date, end at 23:59 Vienna time and skip weekends and Austrian public holidays. Other Member States have other public holidays. Report immediately; the deadline is the latest date.</p>`, 'queue');
+}
+
+function detail() {
+  const dl = deadline('2026-10-23', 2); const l = left(dl);
+  const cells = []; for (let t = +dl.aware; t <= +dl.end; t += DAY) {
+    const day = new Date(t); const c = []; const k = Math.round((t - +dl.aware) / DAY);
+    if (t < +TODAY) c.push('past'); if (t === +TODAY) c.push('today'); if (isRest(day) && k > 0) c.push('rest'); if (t > +dl.legal) c.push('ext'); if (t === +dl.end) c.push('due');
+    const label = k === 0 ? 'Day 0, aware' : t === +dl.end ? 'Due 23:59' : isRest(day) && k > 0 ? restName(day) : t > +dl.legal ? 'Working day' : `Day ${k}`;
+    cells.push(`<div class="d ${c.join(' ')}"><b>${fmtDay(day)}</b><span>${label}</span></div>`);
+  }
+  const correcting = state === 'correct';
+  const tip = state === 'tip';
+  return shell(`
+  <a class="crumb" href="#">${I.back}Queue</a>
+  <div class="dhead"><h1>PLT-2026-0153</h1><span class="flag serious">${I.serious}Possible serious incident</span><span class="tri suggested"><span class="chip">${I.dash}Suggested, not confirmed</span></span></div>
+  <div class="dsub">NB-3 mesh nebuliser, lot NB3-2610. Received by phone from a community pharmacist.</div>
+  <div class="grid">
+    <div class="stack">
+      <section class="panel" aria-labelledby="dl-h"><h2 id="dl-h">${I.clock}Reporting deadline<span class="r">If the suggestion is confirmed</span></h2><div class="pbody">
+        <div class="clock"><div class="big ${l.over ? 'over' : l.soon ? 'soon' : ''}">${l.text.replace(' left', '')}<small> left</small></div><div><div class="dueline">Due ${dl.end.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}, 23:59 Vienna</div>
+        <div class="state"><span class="term" tabindex="0">2-day limit${tip ? `<span class="tip" role="tooltip"><b>Serious public health threat: 2 days</b><br>Report immediately, and not later than 2 days after the manufacturer becomes aware of the threat.<span class="k">MDR Article 87(4). <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017R0745">Read on EUR-Lex</a></span><span class="k">Press Escape to close</span></span>` : ''}</span> for a <span class="term" tabindex="0">serious public health threat</span></div></div></div>
+        <div class="bigtrack" style="--n:${cells.length}">${cells.join('')}</div>
+        <ul class="why">
+          <li>Day 0 is the <span class="term" tabindex="0">awareness date</span>, Fri 23 Oct, when the pharmacist's call was taken.</li>
+          <li>Day 2 is Sun 25 Oct. The period moves past Mon 26 Oct, National Day, to the next working day.</li>
+          <li>A period of two days or more must contain two working days, so it ends on Wed 28 Oct.</li>
+        </ul>
+        <div class="note">Report immediately; the deadline is the latest date. Calendar uses Austrian public holidays (Arbeitsruhegesetz section 7). Other Member States differ. Rules: MDR Art. 87(3) to (5), MDCG 2023-3 Rev.2 Q14, Regulation 1182/71 Art. 3.</div>
+      </div></section>
+      <section class="panel" aria-labelledby="c-h"><h2 id="c-h">Complaint<span class="r">As received, not edited</span></h2><div class="pbody">
+        <p class="complaint">Our pharmacy has had three calls this week from home users of the NB-3, all with devices from lot NB3-2610. The medication reservoir cracks at the seam and the solution runs onto the face mask during treatment. <mark>Two users had the solution in their eyes and needed eye irrigation at A&amp;E.</mark> A third user stopped treatment. We have taken the remaining stock from this lot off the shelf.</p>
+        <dl class="facts"><dt>Reporter</dt><dd>Community pharmacist, Austria</dd><dt>Channel</dt><dd>Phone, logged by complaint intake</dd><dt>Received</dt><dd>Fri 23 Oct 2026, 16:40</dd><dt>Awareness date</dt><dd>Fri 23 Oct 2026</dd><dt>Device</dt><dd>NB-3 mesh nebuliser, class IIa</dd></dl>
+      </div></section>
+    </div>
+    <div class="stack">
+      <section class="panel sugg" aria-labelledby="s-h"><h2 id="s-h">${I.dash}Model suggestion</h2><div class="pbody">
+        <div class="src">gemini-3.8-flash, prompt triage-v1, Fri 23 Oct 16:40</div>
+        <div style="margin-top:8px">
+          <div class="field"><span>Complaint</span><span class="v">Yes</span></div>
+          <div class="field"><span>Possible <span class="term" tabindex="0">serious incident</span></span><span class="v serious">Yes</span></div>
+          <div class="field"><span>Outcome</span><span class="v">Serious public health threat</span></div>
+          <div class="field"><span>Time limit</span><span class="v">2 days, Art. 87(4)</span></div>
+          <div class="field"><span>Problem</span><span class="v">Reservoir cracks at the seam</span></div>
+        </div>
+        <div class="quote">Two users had the solution in their eyes and needed eye irrigation at A&amp;E.</div>
+        <p class="rationale">The same lot defect reached three users and two needed emergency care, so many more users of the lot may be exposed.</p>
+      </div>
+      ${correcting ? `<form class="correct" aria-labelledby="corr-h">
+        <div id="corr-h" style="font-weight:700">Correct the triage</div>
+        <fieldset><legend>Possible serious incident</legend><span class="seg"><span class="on">Yes</span><span>No</span></span></fieldset>
+        <div><label class="l" for="o">Outcome</label><span class="select" style="width:100%;justify-content:space-between" id="o"><b>Serious deterioration, anticipated</b>${I.down}</span><div class="hint">Sets the limit to 15 days, Art. 87(3). Due Mon 9 Nov.</div></div>
+        <div><label class="l" for="r">Reason for correction</label><textarea id="r" class="input err" aria-invalid="true" aria-describedby="r-e"></textarea><div class="errmsg" id="r-e">${I.manual}Enter a reason. It is stored in the audit trail.</div></div>
+        <div style="display:flex;gap:8px"><button class="btn primary" type="button">Save correction</button><button class="btn quiet" type="button">Cancel</button></div>
+      </form>` : `<div class="actions"><button class="btn primary">${I.check}Confirm triage</button><button class="btn">${I.pen}Correct triage</button></div>`}
+      </section>
+      <section class="panel" aria-labelledby="a-h"><h2 id="a-h">Audit trail<span class="r">Append-only</span></h2>
+        <ol class="audit">
+          <li><span class="n">1</span><div><div class="what">Complaint logged</div><div class="meta">Fri 23 Oct 16:40, complaint intake</div><div class="hash">Hash 3f9a 01c2</div></div></li>
+          <li><span class="n">2</span><div><div class="what">Model suggestion stored</div><div class="meta">Fri 23 Oct 16:40, gemini-3.8-flash, triage-v1, raw output kept</div><div class="hash">Hash 8b17 e4d0, follows 3f9a 01c2</div></div></li>
+          <li class="pending"><span class="n">3</span><div><div class="what">Waiting for a quality engineer</div><div class="meta">Confirm or correct to set the deadline</div></div></li>
+        </ol>
+      </section>
+    </div>
+  </div>`, 'queue');
+}
+
+document.getElementById('root').innerHTML = screen === 'detail' ? detail() : queue();
+document.title = 'Playnt ' + screen;
+</script>
+</body>
+</html>

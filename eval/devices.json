@@ -1,0 +1,57 @@
+{
+  "_note": "Fictional manufacturer and devices. Any resemblance to real products is unintended.",
+  "manufacturer": "Orrowell Medical GmbH (fictional)",
+  "devices": [
+    {
+      "ref": "IV-220",
+      "name": "IV-220 volumetric infusion pump",
+      "riskClass": "IIb",
+      "intendedUse": "Controlled intravenous infusion in hospital wards and intensive care.",
+      "anticipatedHarms": [
+        "Over-infusion from free-flow when the cassette is loaded incorrectly",
+        "Under-infusion from a delayed occlusion alarm"
+      ],
+      "expectedSideEffects": []
+    },
+    {
+      "ref": "PX-40",
+      "name": "PX-40 fingertip pulse oximeter",
+      "riskClass": "IIa",
+      "intendedUse": "Spot checks of SpO2 and pulse rate at home and in clinics.",
+      "anticipatedHarms": [
+        "Inaccurate SpO2 reading with low perfusion, cold extremities or nail polish, leading to delayed treatment"
+      ],
+      "expectedSideEffects": ["Transient skin redness under the clip after prolonged use"]
+    },
+    {
+      "ref": "HB-7",
+      "name": "HB-7 electric care bed",
+      "riskClass": "I",
+      "intendedUse": "Patient positioning in nursing homes and home care.",
+      "anticipatedHarms": [
+        "Entrapment between side rail and mattress",
+        "Uncommanded movement from a damaged handset"
+      ],
+      "expectedSideEffects": []
+    },
+    {
+      "ref": "WD-12",
+      "name": "WD-12 silicone foam wound dressing",
+      "riskClass": "IIa",
+      "intendedUse": "Management of moderately exuding chronic wounds.",
+      "anticipatedHarms": ["Mild skin irritation", "Periwound maceration"],
+      "expectedSideEffects": ["Mild skin irritation", "Periwound maceration"]
+    },
+    {
+      "ref": "NB-3",
+      "name": "NB-3 mesh nebuliser",
+      "riskClass": "IIa",
+      "intendedUse": "Home aerosol therapy with prescribed inhalation solutions.",
+      "anticipatedHarms": [
+        "Reduced aerosol output from a clogged mesh, leading to under-dosing",
+        "Battery overheating while charging"
+      ],
+      "expectedSideEffects": []
+    }
+  ]
+}

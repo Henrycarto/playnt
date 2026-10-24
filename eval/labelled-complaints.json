@@ -1,0 +1,246 @@
+{
+  "_note": "Synthetic evaluation set. Fictional devices (see devices.json), fictional reporters identified by role only. Labels were set once, before any model run, by the rules in docs/phase-1-research.md section 4. Never used for prompt development or tuning.",
+  "labelVersion": "2026-10-24",
+  "items": [
+    {
+      "id": "EV-01", "device": "IV-220", "reporterRole": "ICU nurse", "channel": "phone", "awarenessDate": "2026-02-03",
+      "text": "Patient in ICU received the whole 250 mL bag of noradrenaline in about 20 minutes. The pump display showed 5 mL/h the entire time. Patient went into cardiac arrest and died despite resuscitation. The pump and cassette are quarantined.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 10, "difficulty": "clear",
+        "basis": "Malfunction, death, causal link reasonably possible. Art. 87(5): death, 10 days." }
+    },
+    {
+      "id": "EV-02", "device": "IV-220", "reporterRole": "Ward pharmacist", "channel": "email", "awarenessDate": "2026-02-11",
+      "text": "The pump display froze during an insulin infusion and delivery stopped without any alarm. Nobody noticed for about three hours. The patient developed diabetic ketoacidosis and was moved to intensive care.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 10, "difficulty": "clear",
+        "basis": "Serious deterioration (ICU admission). A silent stop with a frozen display is not in the risk file (only delayed occlusion alarm is), so unanticipated. Art. 87(5): 10 days." }
+    },
+    {
+      "id": "EV-03", "device": "IV-220", "reporterRole": "Charge nurse", "channel": "web form", "awarenessDate": "2026-02-19",
+      "text": "The air-in-line alarm did not go off. I saw a column of air about 3 cm long moving down the line towards the patient and clamped it before it reached the cannula. No harm to the patient.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15, "difficulty": "clear",
+        "basis": "Malfunction that might have led to serious deterioration if it happened again (MDCG 2023-3 Q2 criterion B). No death or deterioration occurred. Art. 87(3): 15 days." }
+    },
+    {
+      "id": "EV-04", "device": "IV-220", "reporterRole": "Haematology nurse", "channel": "phone", "awarenessDate": "2026-03-02",
+      "text": "Heparin ran in far too fast after a colleague reloaded the cassette. The patient started bleeding from the line site and gums and needed a blood transfusion. The cassette was found seated at an angle.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15, "difficulty": "clear",
+        "basis": "Serious deterioration, but free-flow from incorrect cassette loading is an anticipated harm in the risk file. Not death, not unanticipated. Art. 87(3): 15 days." }
+    },
+    {
+      "id": "EV-05", "device": "PX-40", "reporterRole": "Family member", "channel": "email", "awarenessDate": "2026-03-09",
+      "text": "My father checked his oxygen at home with the oximeter and it said 97 percent, so we waited. He got more confused during the night and when the ambulance came his oxygen was very low. He died in hospital two days later.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 10, "difficulty": "clear",
+        "basis": "Indirect harm through a decision based on device output (MDCG 2023-3 Q2, Q7). Death. Art. 87(5): 10 days." }
+    },
+    {
+      "id": "EV-06", "device": "PX-40", "reporterRole": "General practitioner", "channel": "phone", "awarenessDate": "2026-03-16",
+      "text": "Parents of a 2-year-old with bronchiolitis relied on the oximeter, which showed 96 percent. The child's hands were cold at the time. The visit to us was delayed by a day and the child was admitted for oxygen therapy. Recovered fully.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15, "difficulty": "clear",
+        "basis": "Hospitalisation is a serious deterioration (MDCG 2023-3 Q2). Inaccurate reading with cold extremities is an anticipated harm. Art. 87(3): 15 days." }
+    },
+    {
+      "id": "EV-07", "device": "HB-7", "reporterRole": "Nursing home manager", "channel": "phone", "awarenessDate": "2026-03-24",
+      "text": "A resident was found in the morning with her neck trapped between the side rail and the mattress. She was unresponsive and was pronounced dead by the emergency doctor.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 10, "difficulty": "clear",
+        "basis": "Death. Entrapment is anticipated, but Art. 87(5) applies to any death: 10 days." }
+    },
+    {
+      "id": "EV-08", "device": "HB-7", "reporterRole": "Home carer", "channel": "web form", "awarenessDate": "2026-04-01",
+      "text": "The bed lowered by itself while nobody was touching the handset and came down on my foot. X-ray showed a fracture of two toes. The handset has a crack along the side.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15, "difficulty": "clear",
+        "basis": "Fracture of a user is a serious deterioration. Uncommanded movement from a damaged handset is anticipated. Art. 87(3): 15 days." }
+    },
+    {
+      "id": "EV-09", "device": "HB-7", "reporterRole": "Physiotherapist", "channel": "email", "awarenessDate": "2026-04-08",
+      "text": "The head section collapsed suddenly while the patient was sitting up. The actuator bracket had snapped. The patient suffered a cervical spine injury and had surgery the next day.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 10, "difficulty": "clear",
+        "basis": "Serious deterioration needing surgery. Structural collapse is not in the risk file: unanticipated. Art. 87(5): 10 days." }
+    },
+    {
+      "id": "EV-10", "device": "NB-3", "reporterRole": "Distributor quality manager", "channel": "email", "awarenessDate": "2026-04-15",
+      "text": "Distributors in three countries report sealed new NB-3 units from lot NB3-2609 with Pseudomonas found in the medication reservoir. Two patients with cystic fibrosis were hospitalised with lung infections after first use.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 2, "difficulty": "clear",
+        "basis": "Lot-wide contamination across countries in a vulnerable population: significant and unexpected, alarming as a potential public health hazard (MDCG 2023-3 Q2, Art. 2(66)). Art. 87(4): 2 days." }
+    },
+    {
+      "id": "EV-11", "device": "IV-220", "reporterRole": "Hospital biomedical engineer", "channel": "phone", "awarenessDate": "2026-03-30",
+      "text": "Since the clock change on Sunday, pumps on firmware 4.2 at our hospital and two others in the region deliver double the programmed rate. We have five reports in 24 hours and one patient overdosed on morphine and needed naloxone.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 2, "difficulty": "clear",
+        "basis": "Fleet-wide systematic fault with possibility of multiple deaths at short intervals (MDCG 2023-3 Q2 on serious public health threat). Art. 87(4): 2 days." }
+    },
+    {
+      "id": "EV-12", "device": "WD-12", "reporterRole": "Neonatal nurse", "channel": "email", "awarenessDate": "2026-05-05",
+      "text": "After 48 hours under the dressing a premature infant had a full-thickness burn-like skin injury in the exact shape of the dressing. Plastic surgery performed a skin graft.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 10, "difficulty": "clear",
+        "basis": "Serious deterioration needing surgery. Not an expected side-effect (only mild irritation and maceration are documented): unanticipated. Art. 87(5): 10 days." }
+    },
+    {
+      "id": "EV-13", "device": "NB-3", "reporterRole": "Patient", "channel": "web form", "awarenessDate": "2026-05-12",
+      "text": "The battery pack swelled up and started smoking while charging on my bedside table. I pulled the plug. Nobody was hurt but the table has a scorch mark.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15, "difficulty": "clear",
+        "basis": "Malfunction that might have led to serious injury (fire). No harm occurred. Art. 87(3): 15 days." }
+    },
+    {
+      "id": "EV-14", "device": "IV-220", "reporterRole": "Transport nurse", "channel": "phone", "awarenessDate": "2026-05-20",
+      "text": "During transfer to the cath lab the pump battery went flat with no low-battery warning. The dopamine stopped for about ten minutes and blood pressure dropped. It recovered after we restarted on mains power.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15, "difficulty": "clear",
+        "basis": "Malfunction that might have led to serious deterioration; no lasting harm. Art. 87(3): 15 days." }
+    },
+    {
+      "id": "EV-15", "device": "IV-220", "reporterRole": "Hospital biomedical engineer", "channel": "email", "awarenessDate": "2026-01-14",
+      "text": "Could you send the current service manual as PDF and confirm the recommended calibration interval? Our maintenance contract is up for renewal.",
+      "label": { "isComplaint": false, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Information request. No deficiency alleged." }
+    },
+    {
+      "id": "EV-16", "device": "PX-40", "reporterRole": "Pharmacy buyer", "channel": "email", "awarenessDate": "2026-01-20",
+      "text": "What is your price for 200 units and how long is delivery to Graz at the moment?",
+      "label": { "isComplaint": false, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Commercial enquiry." }
+    },
+    {
+      "id": "EV-17", "device": "HB-7", "reporterRole": "Ward nurse", "channel": "web form", "awarenessDate": "2026-01-27",
+      "text": "Just wanted to say the motors are much quieter than our old beds. A cup holder on the side rail would be a nice addition.",
+      "label": { "isComplaint": false, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Praise and a feature request. No deficiency alleged." }
+    },
+    {
+      "id": "EV-18", "device": "NB-3", "reporterRole": "Patient", "channel": "phone", "awarenessDate": "2026-02-05",
+      "text": "My doctor prescribed hypertonic saline. Can I use it in the NB-3 or only the solutions listed in the leaflet?",
+      "label": { "isComplaint": false, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Question about use. No deficiency alleged." }
+    },
+    {
+      "id": "EV-19", "device": "WD-12", "reporterRole": "Distributor", "channel": "email", "awarenessDate": "2026-02-12",
+      "text": "Please send us a copy of the current certificate for the WD-12 range. We need it for a hospital tender next week.",
+      "label": { "isComplaint": false, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Document request." }
+    },
+    {
+      "id": "EV-20", "device": "PX-40", "reporterRole": "Patient", "channel": "web form", "awarenessDate": "2026-02-24",
+      "text": "My order arrived two days late and the courier was rude at the door. The oximeter itself is fine.",
+      "label": { "isComplaint": false, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Delivery service issue that does not affect device performance. Outside the complaint definition quoted in MDCG 2023-3." }
+    },
+    {
+      "id": "EV-21", "device": "HB-7", "reporterRole": "Home care coordinator", "channel": "email", "awarenessDate": "2026-03-04",
+      "text": "The outer carton of the bed was badly dented on arrival. We checked the bed inside and it works normally with no visible damage.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Alleges a quality deficiency in the supplied product (packaging). No malfunction, no harm possible." }
+    },
+    {
+      "id": "EV-22", "device": "PX-40", "reporterRole": "Patient", "channel": "web form", "awarenessDate": "2026-03-11",
+      "text": "After one month the display is covered in scratches and hard to read in daylight. The readings themselves seem fine.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Durability complaint. Readings still legible indoors, no harm plausible." }
+    },
+    {
+      "id": "EV-23", "device": "NB-3", "reporterRole": "Patient", "channel": "email", "awarenessDate": "2026-03-18",
+      "text": "The mouthpiece has faded from blue to grey after cleaning it exactly as the leaflet says. It still works.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Cosmetic durability complaint." }
+    },
+    {
+      "id": "EV-24", "device": "IV-220", "reporterRole": "Night nurse", "channel": "web form", "awarenessDate": "2026-04-02",
+      "text": "The end-of-infusion alarm is so loud at night that it wakes the whole bay. The pump works as it should, but can the volume go lower?",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Usability complaint. Device works as specified; a loud alarm does not create a path to serious harm." }
+    },
+    {
+      "id": "EV-25", "device": "WD-12", "reporterRole": "Community nurse", "channel": "phone", "awarenessDate": "2026-04-14",
+      "text": "Mild redness on the skin around the wound after a week of use. It went away two days after we stopped the dressing. No treatment needed.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Expected, documented side-effect (an incident per MDCG 2023-3 Q10), not serious. Subject to trend reporting under Art. 88, not Art. 87." }
+    },
+    {
+      "id": "EV-26", "device": "PX-40", "reporterRole": "Practice nurse", "channel": "email", "awarenessDate": "2026-04-21",
+      "text": "The PX-40 reads 2 percent lower than our bedside monitor on most patients. Is that normal?",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Alleged performance deficiency. A 2 point difference within stated accuracy does not plausibly lead to serious harm." }
+    },
+    {
+      "id": "EV-27", "device": "HB-7", "reporterRole": "Patient", "channel": "phone", "awarenessDate": "2026-04-28",
+      "text": "The handset cable is too short. I have to stretch across to reach it from the chair. No problems otherwise.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Usability complaint, no harm described or plausible." }
+    },
+    {
+      "id": "EV-28", "device": "NB-3", "reporterRole": "Patient", "channel": "web form", "awarenessDate": "2026-05-06",
+      "text": "The nebuliser would not switch on when I checked it before use, after 14 months. I only use it for occasional saline when I have a cold, so I just bought a new one.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "clear",
+        "basis": "Malfunction detected before use, fails safe, non-critical therapy. No plausible path to serious harm." }
+    },
+    {
+      "id": "EV-29", "device": "IV-220", "reporterRole": "Surgical ward nurse", "channel": "web form", "awarenessDate": "2026-05-25",
+      "text": "The pump seemed to run a bit fast. A 1 litre saline bag set for 8 hours finished about an hour early. Patient is fine.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15, "difficulty": "ambiguous",
+        "basis": "No harm with saline, but the same over-delivery with a high-alert drug might lead to serious deterioration (criterion B: if it happened again). Conservative under Art. 87(7). 15 days." }
+    },
+    {
+      "id": "EV-30", "device": "PX-40", "reporterRole": "Patient", "channel": "email", "awarenessDate": "2026-06-02",
+      "text": "The reading jumps around a lot, sometimes 88 then 99 a second later. I am not sure which number to believe.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "ambiguous",
+        "basis": "Visibly unstable readings prompt distrust rather than false reassurance. Labelled not serious, but a reasonable reviewer could flag it." }
+    },
+    {
+      "id": "EV-31", "device": "HB-7", "reporterRole": "Nursing home nurse", "channel": "phone", "awarenessDate": "2026-06-09",
+      "text": "A resident fell out of bed at night and fractured her hip. The side rail was down when we found her. We do not know if the latch failed or if it was left down.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 10, "difficulty": "ambiguous",
+        "basis": "Device cannot reasonably be excluded (MDCG 2023-3 Q2 criterion C). Latch failure is not in the risk file, so if device-related it is unanticipated: 10 days, the earliest applicable limit." }
+    },
+    {
+      "id": "EV-32", "device": "WD-12", "reporterRole": "Community nurse", "channel": "email", "awarenessDate": "2026-06-16",
+      "text": "The wound under the dressing became infected. The GP started oral antibiotics. The pouch looked intact when we opened it.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 10, "difficulty": "ambiguous",
+        "basis": "Unplanned medical treatment counts towards serious deterioration (MDCG 2023-3 Q2). Contamination cannot be excluded. Infection is not an expected side-effect: 10 days. Causality is weak; reasonable reviewers may differ." }
+    },
+    {
+      "id": "EV-33", "device": "NB-3", "reporterRole": "Parent", "channel": "phone", "awarenessDate": "2026-06-23",
+      "text": "My son had an asthma attack during his nebuliser treatment. It did not seem to be misting properly. We went to A&E, he got treatment and came home the same night.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15, "difficulty": "ambiguous",
+        "basis": "Emergency treatment for a possibly life-threatening event; reduced output is an anticipated harm. 15 days. Causality uncertain." }
+    },
+    {
+      "id": "EV-34", "device": "IV-220", "reporterRole": "Sales representative", "channel": "email", "awarenessDate": "2026-07-01",
+      "text": "Forwarding a social media post: someone wrote that 'these Orrowell pumps killed a patient' at a hospital in their city. No names, no dates, no serial numbers.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 10, "difficulty": "ambiguous",
+        "basis": "Alleged death with no verifiable detail. Awareness starts on receipt (MDCG 2023-3 Q15). Uncertain reportability still runs the clock (Art. 87(7)). 10 days pending follow-up." }
+    },
+    {
+      "id": "EV-35", "device": "PX-40", "reporterRole": "Veterinarian", "channel": "web form", "awarenessDate": "2026-07-08",
+      "text": "We tried the PX-40 on a sedated dog during surgery and the readings were wildly wrong compared with our veterinary monitor.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "ambiguous",
+        "basis": "Use outside the intended purpose on an animal. No patient, user or other person at risk. Still logged as a complaint." }
+    },
+    {
+      "id": "EV-36", "device": "HB-7", "reporterRole": "Nursing home manager", "channel": "phone", "awarenessDate": "2026-07-15",
+      "text": "There was a burning smell from the bed motor and then it stopped working. We moved the resident out of the room as a precaution. No smoke that we saw, nobody hurt.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15, "difficulty": "ambiguous",
+        "basis": "Overheating that might lead to fire with an immobile resident. No harm. 15 days." }
+    },
+    {
+      "id": "EV-37", "device": "WD-12", "reporterRole": "Family member", "channel": "email", "awarenessDate": "2026-07-22",
+      "text": "My mother died in the hospice last week. I want to complain that the staff never changed her dressings properly and left them for days.",
+      "label": { "isComplaint": false, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "ambiguous",
+        "basis": "The complaint is about care practice, not a device deficiency, and does not link the death to the dressing. A model that flags every death will get this wrong." }
+    },
+    {
+      "id": "EV-38", "device": "IV-220", "reporterRole": "Hospital biomedical engineer", "channel": "email", "awarenessDate": "2026-07-29",
+      "text": "One pump shows error E-17 at start-up now and then. It refuses to start when that happens. We swapped it out before it was used on anyone.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "ambiguous",
+        "basis": "Malfunction at start-up that fails safe, before patient use. Labelled not serious; a cautious reviewer might ask for investigation first." }
+    },
+    {
+      "id": "EV-39", "device": "NB-3", "reporterRole": "Parent", "channel": "web form", "awarenessDate": "2026-08-05",
+      "text": "The mask strap left a small sore on my daughter's cheek after two weeks of nightly use. It healed with a plaster at home in about a week.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": false, "timeLimitDays": null, "difficulty": "ambiguous",
+        "basis": "Minor harm, no professional care. An incident, not serious." }
+    },
+    {
+      "id": "EV-40", "device": "HB-7", "reporterRole": "National competent authority (forwarded user report)", "channel": "email", "awarenessDate": "2026-08-12",
+      "text": "Forwarded report from a user: 'the bed collapsed'. Injury status unknown. The authority asks the manufacturer to follow up.",
+      "label": { "isComplaint": true, "possibleSeriousIncident": true, "timeLimitDays": 15, "difficulty": "ambiguous",
+        "basis": "Structural collapse might lead to serious injury. Outcome unknown, so no death or deterioration is established yet: 15 days, to be shortened if follow-up reveals one (MDCG 2023-3 Q14 example)." }
+    }
+  ]
+}
