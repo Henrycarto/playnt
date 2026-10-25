@@ -4,6 +4,8 @@
 
 Post-market complaint triage for a fictional medical device manufacturer under the EU Medical Device Regulation. A complaint comes in, a language model suggests whether it is a possible serious incident and which reporting limit applies, and a quality engineer confirms or corrects that suggestion. Every step goes into a hash-linked audit trail, and the deadline clock follows the MDR time limits to the day.
 
+**Live demo: [playnt.vercel.app](https://playnt.vercel.app)**, in demo mode with recorded model responses and the clock fixed at 25 October 2026. Anything you log, confirm or correct there is reset every night.
+
 **Synthetic data. Not a validated quality management system.** The manufacturer (Orrowell Medical GmbH), its five devices and every complaint are invented. Nothing here is fit for real vigilance work.
 
 ![Logging a complaint, reading the model's suggestion and correcting it with a reason](docs/screenshots/intake-to-correction.gif)
@@ -125,7 +127,7 @@ Only the complaint text and the fictional device's risk file are sent to the mod
 
 ## Hosted demo
 
-The hosted demo is one Vercel project: the web app as static files and the whole Express API as one Vercel Function in Frankfurt (`fra1`), entered through [`api/index.ts`](api/index.ts), which reuses one app and one MongoDB client per function instance ([`apps/api/src/handler.ts`](apps/api/src/handler.ts)). The data lives on a MongoDB Atlas M0 cluster. It runs in demo mode: recorded model responses, the clock fixed at 25 October 2026, 10:00 Vienna, and no Gemini key anywhere in production.
+The hosted demo at [playnt.vercel.app](https://playnt.vercel.app) is one Vercel project: the web app as static files and the whole Express API as one Vercel Function in Frankfurt (`fra1`), entered through [`api/index.ts`](api/index.ts), which reuses one app and one MongoDB client per function instance ([`apps/api/src/handler.ts`](apps/api/src/handler.ts)). The data lives on a MongoDB Atlas M0 cluster. It runs in demo mode: recorded model responses, the clock fixed at 25 October 2026, 10:00 Vienna, and no Gemini key anywhere in production.
 
 Visitors can log, confirm and correct complaints, so the database drifts. A [nightly GitHub Action](.github/workflows/reseed.yml) drops it and loads the seeded story again.
 
