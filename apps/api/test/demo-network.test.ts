@@ -1,7 +1,7 @@
 import net from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { MongoClient } from 'mongodb';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import request from 'supertest';
 import { createApp } from '../src/app.js';
 import { clockFrom, loadConfig } from '../src/config.js';
@@ -11,7 +11,7 @@ import { seedDatabase } from '../src/seed.js';
 import { GeminiProvider } from '../src/triage/gemini.js';
 
 // Demo mode must never call a real service. Every fetch and every socket is watched while the whole demo runs.
-let server: MongoMemoryServer;
+let server: MongoMemoryReplSet;
 let client: MongoClient;
 const fetches: string[] = [];
 const sockets: string[] = [];
@@ -19,7 +19,7 @@ const realFetch = globalThis.fetch;
 const realConnect = net.Socket.prototype.connect;
 
 beforeAll(async () => {
-  server = await MongoMemoryServer.create(); // may download the MongoDB binary once, so it starts before the watch
+  server = await MongoMemoryReplSet.create({ replSet: { count: 1 } }); // may download the MongoDB binary once, so it starts before the watch
   client = new MongoClient(server.getUri());
   await client.connect();
   globalThis.fetch = (async (input: string | URL | Request) => {

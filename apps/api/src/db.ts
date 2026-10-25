@@ -1,4 +1,4 @@
-import { type Db, MongoClient, MongoServerError, type ObjectId } from 'mongodb';
+import { type ClientSession, type Db, MongoClient, MongoServerError, type ObjectId } from 'mongodb';
 import type { ComplaintStatus, HumanTriage, LimitDays, ModelTriage } from '@playnt/shared';
 import { COMPLAINT_STATUSES, SERIOUS_OUTCOMES, CHANNELS } from '@playnt/shared';
 
@@ -56,6 +56,9 @@ export interface ComplaintDoc {
   deadline: { limitDays: LimitDays; dueDate: string; dueAt: Date } | null;
   // Set when the quality engineer records that the serious incident report was submitted. Stops the clock.
   report?: { submittedOn: string; recordedAt: Date; by: string } | null;
+  // Sequence number and hash of the complaint's last audit event, written in the same transaction as the event.
+  // The chain check compares against it, so a deleted last event is caught too.
+  auditHead: { seq: number; hash: string } | null;
 }
 
 export interface AuditDoc {
@@ -73,6 +76,7 @@ export interface AuditDoc {
 }
 
 export interface Collections {
+  client: MongoClient;
   devices: import('mongodb').Collection<DeviceDoc>;
   complaints: import('mongodb').Collection<ComplaintDoc>;
   audit: import('mongodb').Collection<AuditDoc>;
@@ -80,6 +84,7 @@ export interface Collections {
 }
 
 export const collections = (db: Db): Collections => ({
+  client: db.client,
   devices: db.collection<DeviceDoc>('devices'),
   complaints: db.collection<ComplaintDoc>('complaints'),
   audit: db.collection<AuditDoc>('auditEvents'),
@@ -121,7 +126,7 @@ export const validators = {
   complaints: {
     $jsonSchema: {
       bsonType: 'object',
-      required: ['ref', 'deviceId', 'text', 'reporter', 'channel', 'awarenessDate', 'receivedAt', 'status', 'triageHistory', 'current', 'deadline'],
+      required: ['ref', 'deviceId', 'text', 'reporter', 'channel', 'awarenessDate', 'receivedAt', 'status', 'triageHistory', 'current', 'deadline', 'auditHead'],
       properties: {
         ref: { bsonType: 'string', pattern: '^PLT-\\d{4}-\\d{4}$' },
         deviceId: { bsonType: 'objectId' },
@@ -173,6 +178,12 @@ export const validators = {
             { bsonType: 'object', required: ['submittedOn', 'recordedAt', 'by'], additionalProperties: false, properties: { submittedOn: { bsonType: 'string', pattern: '^\\d{4}-\\d{2}-\\d{2}$' }, recordedAt: { bsonType: 'date' }, by: nonEmpty } },
           ],
         },
+        auditHead: {
+          oneOf: [
+            { bsonType: 'null' },
+            { bsonType: 'object', required: ['seq', 'hash'], additionalProperties: false, properties: { seq: { bsonType: 'int', minimum: 1 }, hash: { bsonType: 'string', pattern: '^[a-f0-9]{64}$' } } },
+          ],
+        },
         deadline: {
           oneOf: [
             { bsonType: 'null' },
@@ -207,6 +218,17 @@ export const validators = {
     },
   },
 } as const;
+
+// A complaint change and its audit events commit together or not at all. Transactions need a replica set:
+// MongoDB Atlas is one, the tests and the local demo start a one-member set, and docker-compose.yml runs one.
+export async function inTransaction<T>(c: Collections, fn: (session: ClientSession) => Promise<T>): Promise<T> {
+  const session = c.client.startSession();
+  try {
+    return await session.withTransaction(fn);
+  } finally {
+    await session.endSession();
+  }
+}
 
 // Creates collections with validators and the indexes the queries rely on. Safe to run repeatedly.
 export async function setupCollections(db: Db): Promise<void> {

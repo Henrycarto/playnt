@@ -95,8 +95,9 @@ The full research notes are in [`docs/phase-1-research.md`](docs/phase-1-researc
 
 - **`complaints` embeds its triage history.** Each model suggestion and each human decision is an element of `triageHistory`. They belong to one complaint, are never shared, and the complaint screen always reads them together, so one document read serves the whole screen. The current triage and the deadline are kept as fields next to the history so the queue can sort and filter without unwinding arrays.
 - **`devices` is referenced, not embedded.** A device's risk file is shared by many complaints and changes on its own schedule. The model prompt reads it at triage time.
-- **`auditEvents` is its own append-only collection.** One event per intake, suggestion, rejected output, decision and report, with a per-complaint sequence number and the hash of the previous event. Editing or deleting an event breaks the chain, and the audit page shows where. The API has no update or delete path for it, and `npm run db:setup` creates an application user that may only `find` and `insert` on this collection, so the guarantee does not rest on application code alone. The hosted demo keeps the same guarantee: MongoDB Atlas supports custom database roles on its free M0 tier, so the hosted app connects as a user whose only role grants `find` and `insert` on `auditEvents` (see [Hosted demo](#hosted-demo)).
+- **`auditEvents` is its own append-only collection.** One event per intake, suggestion, rejected output, decision and report, with a per-complaint sequence number and the hash of the previous event. Each complaint also records the sequence number and hash of its last event (`auditHead`). Editing or deleting an event breaks the chain, deleting the last one leaves the chain short of the complaint's record, and the audit page shows where. The API has no update or delete path for it, and `npm run db:setup` creates an application user that may only `find` and `insert` on this collection, so the guarantee does not rest on application code alone. The hosted demo keeps the same guarantee: MongoDB Atlas supports custom database roles on its free M0 tier, so the hosted app connects as a user whose only role grants `find` and `insert` on `auditEvents` (see [Hosted demo](#hosted-demo)).
 - **Indexes follow the screens.** `{ status: 1, "deadline.dueAt": 1 }` for the queue, `{ deviceId: 1, awarenessDate: -1 }` for trends, `{ complaintId: 1, seq: 1 }` unique for the audit chain, plus unique complaint and device references.
+- **Each change and its audit events in one transaction.** Logging a complaint (with its reference number and first two events), a decision, a retry and a report record each commit together with their audit events, or not at all. The model is asked before the transaction starts. Transactions need a replica set: Atlas is one, and the tests, `npm run demo` and `docker-compose.yml` each run a one-member replica set.
 - **Validation in two places.** JSON Schema validators on every collection, and Zod at the API boundary. The model's output is validated too: anything that does not parse, or whose evidence quote is not an exact substring of the complaint, is stored raw and the complaint goes to manual triage. It is never repaired.
 - **Trends are one aggregation pipeline:** match decided triage in the date range, group by device, problem and month (`$dateTrunc` in Vienna time), look up device names.
 
@@ -115,13 +116,13 @@ With a real database and a live model:
 
 ```sh
 cp .env.example .env          # set GEMINI_API_KEY and the MongoDB passwords
-docker compose up -d          # MongoDB 8 on 127.0.0.1:27017
+docker compose up -d          # MongoDB 8, one-member replica set, on 127.0.0.1:27017
 npm run db:setup -w apps/api  # collections, validators, indexes, least-privilege app user
 npm run seed
 TRIAGE_PROVIDER=gemini npm run dev
 ```
 
-Other scripts: `npm run record` records model responses for new seed or sample texts; `npm test` runs the Vitest unit and API tests on mongodb-memory-server; `npm run test:e2e` runs the Playwright browser tests in light and dark mode with axe accessibility checks.
+Other scripts: `npm run record` records model responses for new seed or sample texts; `npm test` runs the Vitest unit and API tests on mongodb-memory-server, started as a one-member replica set; `npm run test:e2e` runs the Playwright browser tests in light and dark mode with axe accessibility checks.
 
 Only the complaint text and the fictional device's risk file are sent to the model. The reporter's role and country are not.
 
@@ -153,6 +154,7 @@ Atlas only accepts custom roles created in the Atlas UI, the Atlas CLI or the Ad
 
 ## Next steps
 
+- **Model calls off the request path.** Logging a complaint calls the model inside the request, with up to five tries. At volume, intake should save the complaint and queue the call (for example BullMQ on Redis), with workers limited to the model's quota, retries, and manual triage after the last attempt.
 - **IMDRF adverse event coding.** Code the device problem with IMDRF Annex A terms (and health effects with Annexes E and F) instead of free text, so trends group by coded problem. Left out of the MVP because the licence terms of the code tables could not be verified and the IMDRF website terms restrict commercial reuse, which conflicts with this repository's MIT licence.
 - A reportability awareness date (MDCG 2023-3 Q15) for when later information makes an incident reportable.
 - Public holidays per Member State, chosen by where the incident happened.

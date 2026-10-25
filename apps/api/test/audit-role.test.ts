@@ -1,16 +1,16 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { MongoClient, MongoServerError, ObjectId } from 'mongodb';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import { appendAudit } from '../src/audit.js';
-import { collections, setupAppRole, setupCollections } from '../src/db.js';
+import { collections, inTransaction, setupAppRole, setupCollections, type ComplaintDoc } from '../src/db.js';
 
 // MongoDB itself enforces the append-only rule: the application user has find and insert on auditEvents, nothing else.
-let server: MongoMemoryServer;
+let server: MongoMemoryReplSet;
 let admin: MongoClient;
 let app: MongoClient;
 
 beforeAll(async () => {
-  server = await MongoMemoryServer.create({ auth: { enable: true, customRootName: 'root', customRootPwd: 'root-test-password' } });
+  server = await MongoMemoryReplSet.create({ replSet: { count: 1, auth: { enable: true, customRootName: 'root', customRootPwd: 'root-test-password' } } });
   admin = new MongoClient(server.getUri(), { auth: { username: 'root', password: 'root-test-password' }, authSource: 'admin' });
   await admin.connect();
   await setupCollections(admin.db('playnt'));
@@ -26,10 +26,20 @@ afterAll(async () => {
 });
 
 describe('least-privilege application user', () => {
-  it('can append and read audit events', async () => {
+  it("can append and read audit events, in a transaction that moves the complaint's audit head", async () => {
     const c = collections(app.db('playnt'));
-    const e = await appendAudit(c, { complaintId: new ObjectId(), complaintRef: 'PLT-2026-0001', type: 'complaint_logged', at: new Date(), actor: 'Complaint intake', summary: 'Logged.', payload: {} });
+    const complaint: ComplaintDoc = {
+      _id: new ObjectId(), ref: 'PLT-2026-0001', deviceId: new ObjectId(), text: 'The display froze during an infusion.', reporter: { role: 'Nurse', country: 'Austria' },
+      channel: 'phone', awarenessDate: '2026-10-23', receivedAt: new Date(), status: 'needs_manual_triage', triageHistory: [
+        { kind: 'model_suggestion', at: new Date(), provider: 'test', model: 'test', promptVersion: 'triage-v1', raw: null, triage: null, error: 'none' },
+      ], current: null, deadline: null, report: null, auditHead: null,
+    };
+    const e = await inTransaction(c, async (session) => {
+      await c.complaints.insertOne(complaint, { session });
+      return appendAudit(c, { complaintId: complaint._id, complaintRef: complaint.ref, type: 'complaint_logged', at: new Date(), actor: 'Complaint intake', summary: 'Logged.', payload: {} }, session);
+    });
     expect(await c.audit.countDocuments({ _id: e._id })).toBe(1);
+    expect((await c.complaints.findOne({ _id: complaint._id }))!.auditHead).toEqual({ seq: 1, hash: e.hash });
   });
 
   it.each([

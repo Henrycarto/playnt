@@ -1,5 +1,5 @@
-// Self-contained demo: in-memory MongoDB, seeded story, API on PORT. Used for browser tests and CI; no Docker needed.
-import { MongoMemoryServer } from 'mongodb-memory-server';
+// Self-contained demo: in-memory MongoDB replica set, seeded story, API on PORT. Used for browser tests and CI; no Docker needed.
+import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import { createApp } from '../src/app.js';
 import { clockFrom, loadConfig } from '../src/config.js';
 import { collections, connect } from '../src/db.js';
@@ -7,7 +7,8 @@ import { providerFrom } from '../src/providers.js';
 import { seedDatabase } from '../src/seed.js';
 
 const config = loadConfig();
-const mongo = await MongoMemoryServer.create();
+// A one-member replica set, because writes and their audit events commit in one transaction.
+const mongo = await MongoMemoryReplSet.create({ replSet: { count: 1 } });
 const { db } = await connect(mongo.getUri(), config.dbName);
 const provider = providerFrom(config);
 const clock = clockFrom(config.fixedNow);

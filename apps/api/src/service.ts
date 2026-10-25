@@ -1,4 +1,4 @@
-import { ObjectId, type Document } from 'mongodb';
+import { type ClientSession, ObjectId, type Document } from 'mongodb';
 import {
   computeDeadline, DeadlineRangeError, parseModelOutput, triageConsistency, viennaDate,
   type AuditEventView, type ComplaintDetail, type ComplaintInput, type ComplaintStatus, type ComplaintSummary,
@@ -6,7 +6,7 @@ import {
 } from '@playnt/shared';
 import { appendAudit } from './audit.js';
 import type { Clock } from './config.js';
-import type { AuditDoc, Collections, ComplaintDoc, DeviceDoc, HumanDecisionDoc, ModelSuggestionDoc } from './db.js';
+import { inTransaction, type AuditDoc, type Collections, type ComplaintDoc, type DeviceDoc, type HumanDecisionDoc, type ModelSuggestionDoc } from './db.js';
 import { buildTriageRequest, PROMPT_VERSION } from './triage/prompt.js';
 import type { TriageProvider } from './triage/provider.js';
 
@@ -64,8 +64,8 @@ function derive(awarenessDate: string, history: ComplaintDoc['triageHistory']): 
   };
 }
 
-async function nextRef(c: Collections, year: number): Promise<string> {
-  const counter = await c.counters.findOneAndUpdate({ _id: `complaint-${year}` }, { $inc: { seq: 1 } }, { upsert: true, returnDocument: 'after' });
+async function nextRef(c: Collections, year: number, session: ClientSession): Promise<string> {
+  const counter = await c.counters.findOneAndUpdate({ _id: `complaint-${year}` }, { $inc: { seq: 1 } }, { upsert: true, returnDocument: 'after', session });
   return `PLT-${year}-${String(counter!.seq).padStart(4, '0')}`;
 }
 
@@ -92,36 +92,42 @@ export async function logComplaint(deps: Deps, input: ComplaintInput, at: Date =
   if (input.awarenessDate > viennaDate(at)) {
     throw new HttpError(422, 'The awareness date cannot be in the future.', [{ path: 'awarenessDate', message: 'The awareness date cannot be in the future.' }]);
   }
+  // The model is asked before the transaction: a slow call must not hold it open, and a retried transaction must not ask twice.
   const suggestion = await suggest(deps, input.text, device, at);
   const history = [suggestion];
-  const doc: ComplaintDoc = {
-    _id: new ObjectId(),
-    ref: await nextRef(deps.c, Number(input.awarenessDate.slice(0, 4))),
-    deviceId: device._id,
-    text: input.text,
-    reporter: { role: input.reporterRole, country: input.reporterCountry },
-    channel: input.channel,
-    awarenessDate: input.awarenessDate,
-    receivedAt: at,
-    triageHistory: history,
-    ...derive(input.awarenessDate, history),
-    report: null,
-  };
-  await deps.c.complaints.insertOne(doc);
-  await appendAudit(deps.c, {
-    complaintId: doc._id, complaintRef: doc.ref, type: 'complaint_logged', at, actor: INTAKE_ACTOR,
-    summary: `Complaint logged for ${device.ref}, awareness date ${input.awarenessDate}.`,
-    payload: { text: input.text, deviceId: device._id.toHexString(), channel: input.channel, reporterRole: input.reporterRole, awarenessDate: input.awarenessDate },
+  // The complaint, its reference number and its first two audit events commit together or not at all.
+  const id = await inTransaction(deps.c, async (session) => {
+    const doc: ComplaintDoc = {
+      _id: new ObjectId(),
+      ref: await nextRef(deps.c, Number(input.awarenessDate.slice(0, 4)), session),
+      deviceId: device._id,
+      text: input.text,
+      reporter: { role: input.reporterRole, country: input.reporterCountry },
+      channel: input.channel,
+      awarenessDate: input.awarenessDate,
+      receivedAt: at,
+      triageHistory: history,
+      ...derive(input.awarenessDate, history),
+      report: null,
+      auditHead: null,
+    };
+    await deps.c.complaints.insertOne(doc, { session });
+    await appendAudit(deps.c, {
+      complaintId: doc._id, complaintRef: doc.ref, type: 'complaint_logged', at, actor: INTAKE_ACTOR,
+      summary: `Complaint logged for ${device.ref}, awareness date ${input.awarenessDate}.`,
+      payload: { text: input.text, deviceId: device._id.toHexString(), channel: input.channel, reporterRole: input.reporterRole, awarenessDate: input.awarenessDate },
+    }, session);
+    await appendAudit(deps.c, {
+      complaintId: doc._id, complaintRef: doc.ref, at, actor: `${suggestion.provider}: ${suggestion.model}`,
+      type: suggestion.triage ? 'model_suggestion_stored' : 'model_output_rejected',
+      summary: suggestion.triage
+        ? `Model suggested: ${suggestion.triage.possibleSeriousIncident ? `possible serious incident, ${suggestion.triage.timeLimitDays}-day limit` : suggestion.triage.isComplaint ? 'complaint, not a possible serious incident' : 'not a complaint'}.`
+        : suggestion.raw === null ? `No model output, needs manual triage: ${suggestion.error}` : `Model output rejected, needs manual triage: ${suggestion.error}`,
+      payload: { promptVersion: suggestion.promptVersion, model: suggestion.model, raw: suggestion.raw, triage: suggestion.triage, error: suggestion.error },
+    }, session);
+    return doc._id;
   });
-  await appendAudit(deps.c, {
-    complaintId: doc._id, complaintRef: doc.ref, at, actor: `${suggestion.provider}: ${suggestion.model}`,
-    type: suggestion.triage ? 'model_suggestion_stored' : 'model_output_rejected',
-    summary: suggestion.triage
-      ? `Model suggested: ${suggestion.triage.possibleSeriousIncident ? `possible serious incident, ${suggestion.triage.timeLimitDays}-day limit` : suggestion.triage.isComplaint ? 'complaint, not a possible serious incident' : 'not a complaint'}.`
-      : suggestion.raw === null ? `No model output, needs manual triage: ${suggestion.error}` : `Model output rejected, needs manual triage: ${suggestion.error}`,
-    payload: { promptVersion: suggestion.promptVersion, model: suggestion.model, raw: suggestion.raw, triage: suggestion.triage, error: suggestion.error },
-  });
-  return doc;
+  return (await deps.c.complaints.findOne({ _id: id }))!;
 }
 
 export async function decide(deps: Deps, id: string, input: DecisionInput, at: Date = deps.clock()): Promise<ComplaintDoc> {
@@ -150,18 +156,20 @@ export async function decide(deps: Deps, id: string, input: DecisionInput, at: D
   const entry: HumanDecisionDoc = { kind: 'human_decision', at, action: input.action, by: ACTOR, triage, reason };
   const history = [...doc.triageHistory, entry];
   // The size condition makes the write fail if someone else decided in the meantime.
-  const res = await deps.c.complaints.updateOne(
-    { _id: doc._id, triageHistory: { $size: doc.triageHistory.length } },
-    { $push: { triageHistory: entry }, $set: derive(doc.awarenessDate, history) },
-  );
-  if (res.modifiedCount !== 1) throw new HttpError(409, 'This complaint changed while you were deciding. Reload and try again.');
-
   const limit = triage.possibleSeriousIncident ? `possible serious incident, ${triage.timeLimitDays}-day limit` : triage.isComplaint ? 'complaint, not a possible serious incident' : 'not a complaint';
-  await appendAudit(deps.c, {
-    complaintId: doc._id, complaintRef: doc.ref, at, actor: ACTOR,
-    type: input.action === 'confirm' ? 'triage_confirmed' : 'triage_corrected',
-    summary: input.action === 'confirm' ? `Confirmed the model suggestion: ${limit}.` : `Corrected the triage to ${limit}. Reason: ${reason}`,
-    payload: { triage, reason },
+  await inTransaction(deps.c, async (session) => {
+    const res = await deps.c.complaints.updateOne(
+      { _id: doc._id, triageHistory: { $size: doc.triageHistory.length } },
+      { $push: { triageHistory: entry }, $set: derive(doc.awarenessDate, history) },
+      { session },
+    );
+    if (res.modifiedCount !== 1) throw new HttpError(409, 'This complaint changed while you were deciding. Reload and try again.');
+    await appendAudit(deps.c, {
+      complaintId: doc._id, complaintRef: doc.ref, at, actor: ACTOR,
+      type: input.action === 'confirm' ? 'triage_confirmed' : 'triage_corrected',
+      summary: input.action === 'confirm' ? `Confirmed the model suggestion: ${limit}.` : `Corrected the triage to ${limit}. Reason: ${reason}`,
+      payload: { triage, reason },
+    }, session);
   });
   return (await deps.c.complaints.findOne({ _id: doc._id }))!;
 }
@@ -175,16 +183,19 @@ export async function retryTriage(deps: Deps, id: string, at: Date = deps.clock(
   const device = await deps.c.devices.findOne({ _id: doc.deviceId });
   const suggestion = await suggest(deps, doc.text, device!, at);
   const history = [...doc.triageHistory, suggestion];
-  const res = await deps.c.complaints.updateOne(
-    { _id: doc._id, triageHistory: { $size: doc.triageHistory.length } },
-    { $push: { triageHistory: suggestion }, $set: derive(doc.awarenessDate, history) },
-  );
-  if (res.modifiedCount !== 1) throw new HttpError(409, 'This complaint changed in the meantime. Reload and try again.');
-  await appendAudit(deps.c, {
-    complaintId: doc._id, complaintRef: doc.ref, at, actor: `${suggestion.provider}: ${suggestion.model}`,
-    type: suggestion.triage ? 'model_suggestion_stored' : 'model_output_rejected',
-    summary: suggestion.triage ? 'Retry: model suggestion stored.' : `Retry failed, still needs manual triage: ${suggestion.error}`,
-    payload: { promptVersion: suggestion.promptVersion, model: suggestion.model, raw: suggestion.raw, triage: suggestion.triage, error: suggestion.error, retry: true },
+  await inTransaction(deps.c, async (session) => {
+    const res = await deps.c.complaints.updateOne(
+      { _id: doc._id, triageHistory: { $size: doc.triageHistory.length } },
+      { $push: { triageHistory: suggestion }, $set: derive(doc.awarenessDate, history) },
+      { session },
+    );
+    if (res.modifiedCount !== 1) throw new HttpError(409, 'This complaint changed in the meantime. Reload and try again.');
+    await appendAudit(deps.c, {
+      complaintId: doc._id, complaintRef: doc.ref, at, actor: `${suggestion.provider}: ${suggestion.model}`,
+      type: suggestion.triage ? 'model_suggestion_stored' : 'model_output_rejected',
+      summary: suggestion.triage ? 'Retry: model suggestion stored.' : `Retry failed, still needs manual triage: ${suggestion.error}`,
+      payload: { promptVersion: suggestion.promptVersion, model: suggestion.model, raw: suggestion.raw, triage: suggestion.triage, error: suggestion.error, retry: true },
+    }, session);
   });
   return (await deps.c.complaints.findOne({ _id: doc._id }))!;
 }
@@ -202,13 +213,15 @@ export async function recordReport(deps: Deps, id: string, input: ReportInput, a
   if (input.submittedOn < doc.awarenessDate) throw issue('The report cannot be submitted before the awareness date.');
   if (input.submittedOn > viennaDate(at)) throw issue('The submission date cannot be in the future.');
   const report = { submittedOn: input.submittedOn, recordedAt: at, by: ACTOR };
-  const res = await deps.c.complaints.updateOne({ _id: doc._id, report: null }, { $set: { report } });
-  if (res.modifiedCount !== 1) throw new HttpError(409, 'This complaint changed in the meantime. Reload and try again.');
   const late = doc.deadline && input.submittedOn > doc.deadline.dueDate;
-  await appendAudit(deps.c, {
-    complaintId: doc._id, complaintRef: doc.ref, at, actor: ACTOR, type: 'report_recorded',
-    summary: `Serious incident report submitted on ${input.submittedOn}${doc.deadline ? (late ? `, after the deadline of ${doc.deadline.dueDate}` : `, within the deadline of ${doc.deadline.dueDate}`) : ''}.`,
-    payload: { submittedOn: input.submittedOn, dueDate: doc.deadline?.dueDate ?? null },
+  await inTransaction(deps.c, async (session) => {
+    const res = await deps.c.complaints.updateOne({ _id: doc._id, report: null }, { $set: { report } }, { session });
+    if (res.modifiedCount !== 1) throw new HttpError(409, 'This complaint changed in the meantime. Reload and try again.');
+    await appendAudit(deps.c, {
+      complaintId: doc._id, complaintRef: doc.ref, at, actor: ACTOR, type: 'report_recorded',
+      summary: `Serious incident report submitted on ${input.submittedOn}${doc.deadline ? (late ? `, after the deadline of ${doc.deadline.dueDate}` : `, within the deadline of ${doc.deadline.dueDate}`) : ''}.`,
+      payload: { submittedOn: input.submittedOn, dueDate: doc.deadline?.dueDate ?? null },
+    }, session);
   });
   return (await deps.c.complaints.findOne({ _id: doc._id }))!;
 }

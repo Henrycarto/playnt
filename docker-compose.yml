@@ -1,7 +1,16 @@
 # Local MongoDB for Playnt. Data lives in a named Docker volume, outside the OneDrive folder.
+# A one-member replica set, because writes and their audit events commit in one transaction, as on Atlas.
+# With authentication on, replica set members need a key file; a fresh one is written at each start.
 services:
   mongo:
     image: mongo:8.0
+    command:
+      - bash
+      - -c
+      - >-
+        head -c 756 /dev/urandom | base64 > /tmp/keyfile &&
+        chmod 400 /tmp/keyfile && chown mongodb:mongodb /tmp/keyfile &&
+        exec docker-entrypoint.sh mongod --replSet rs0 --keyFile /tmp/keyfile --bind_ip_all
     ports:
       - "127.0.0.1:27017:27017"
     environment:
@@ -9,9 +18,14 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-change-me-locally}
     volumes:
       - playnt-mongo:/data/db
+    # Starts the replica set on first run, then reports healthy once this member is primary.
     healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      test:
+        - CMD-SHELL
+        - >-
+          mongosh --quiet -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --eval
+          "try { rs.status() } catch (e) { rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: '127.0.0.1:27017' }] }) } db.hello().isWritablePrimary || quit(1)"
       interval: 5s
-      retries: 20
+      retries: 30
 volumes:
   playnt-mongo:

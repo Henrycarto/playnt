@@ -1,7 +1,8 @@
 import request from 'supertest';
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MongoServerError, ObjectId } from 'mongodb';
 import type { ComplaintDetail } from '@playnt/shared';
+import { createApp } from '../src/app.js';
 import { collections } from '../src/db.js';
 import { complaintBody, startEnv, triage, type TestEnv } from './helpers.js';
 
@@ -9,7 +10,7 @@ const TEXT = complaintBody('x').text;
 const QUOTE = 'The patient was moved to intensive care.';
 let env: TestEnv;
 
-beforeAll(async () => { env = await startEnv(); }, 120_000);
+beforeAll(async () => { env = await startEnv(); }, 180_000);
 afterAll(async () => { await env?.stop(); });
 beforeEach(async () => {
   const c = collections(env.db);
@@ -195,11 +196,68 @@ describe('audit trail', () => {
   });
 });
 
+describe('transactions and the audit head', () => {
+  // An app whose second audit insert fails, as a lost connection or a full disk would make it.
+  function appFailingOnAuditInsert(n: number) {
+    const c = collections(env.db);
+    const insert = c.audit.insertOne.bind(c.audit);
+    let calls = 0;
+    vi.spyOn(c.audit, 'insertOne').mockImplementation(((...args: Parameters<typeof insert>) => {
+      if (++calls === n) throw new Error('Simulated failure while storing an audit event.');
+      return insert(...args);
+    }) as typeof insert);
+    return createApp({ c, provider: env.provider, clock: () => env.now.value, mode: 'test' });
+  }
+
+  it('writes nothing at intake when an audit event cannot be stored: no complaint, no event, no used reference', async () => {
+    const res = await request(appFailingOnAuditInsert(2)).post('/api/complaints').send(complaintBody(env.devices['IV-220']!));
+    expect(res.status).toBe(500);
+    const c = collections(env.db);
+    expect(await c.complaints.countDocuments()).toBe(0);
+    expect(await c.audit.countDocuments()).toBe(0);
+    expect((await post(complaintBody(env.devices['IV-220']!))).body.ref).toBe('PLT-2026-0001');
+  });
+
+  it('rolls back a decision when its audit event cannot be stored', async () => {
+    const { body } = await post(complaintBody(env.devices['IV-220']!));
+    const res = await request(appFailingOnAuditInsert(1)).post(`/api/complaints/${body.id}/decisions`).send({ action: 'confirm' });
+    expect(res.status).toBe(500);
+    const after = (await request(env.app).get(`/api/complaints/${body.id}`)).body as ComplaintDetail;
+    expect(after.status).toBe('suggested');
+    expect(after.triageHistory).toHaveLength(1);
+    expect(after.audit).toHaveLength(2);
+    expect((await request(env.app).get('/api/audit/verify')).body.broken).toEqual([]);
+  });
+
+  it("keeps the complaint's audit head on its last event", async () => {
+    const { body } = await post(complaintBody(env.devices['IV-220']!));
+    await decideOn(body.id, { action: 'confirm' });
+    const doc = await collections(env.db).complaints.findOne({ _id: new ObjectId(body.id) });
+    const last = await collections(env.db).audit.findOne({ complaintId: new ObjectId(body.id) }, { sort: { seq: -1 } });
+    expect(doc!.auditHead).toEqual({ seq: 3, hash: last!.hash });
+  });
+
+  it('detects a deleted last event, which still leaves a chain that links', async () => {
+    const { body } = await post(complaintBody(env.devices['IV-220']!));
+    await decideOn(body.id, { action: 'confirm' });
+    await collections(env.db).audit.deleteOne({ complaintId: new ObjectId(body.id), seq: 3 });
+    const check = (await request(env.app).get('/api/audit/verify')).body;
+    expect(check.broken).toEqual([{ complaintRef: body.ref, seq: 3, problem: 'The chain ends at event 2, but the complaint records event 3 as the last.' }]);
+  });
+
+  it('detects a complaint whose whole chain was deleted', async () => {
+    const { body } = await post(complaintBody(env.devices['IV-220']!));
+    await collections(env.db).audit.deleteMany({ complaintId: new ObjectId(body.id) });
+    const check = (await request(env.app).get('/api/audit/verify')).body;
+    expect(check.broken).toEqual([{ complaintRef: body.ref, seq: 2, problem: 'The complaint records 2 events, but none are stored.' }]);
+  });
+});
+
 describe('MongoDB JSON Schema validation', () => {
   it('refuses a complaint document with an unknown status, even when written around the API', async () => {
     const err = await collections(env.db).complaints.insertOne({
       _id: new ObjectId(), ref: 'PLT-2026-9999', deviceId: new ObjectId(), text: TEXT, reporter: { role: 'x', country: 'y' }, channel: 'email',
-      awarenessDate: '2026-10-23', receivedAt: new Date(), status: 'closed' as never, triageHistory: [], current: null, deadline: null,
+      awarenessDate: '2026-10-23', receivedAt: new Date(), status: 'closed' as never, triageHistory: [], current: null, deadline: null, auditHead: null,
     }).catch((e) => e);
     expect(err).toBeInstanceOf(MongoServerError);
     expect((err as MongoServerError).code).toBe(121);

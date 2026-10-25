@@ -1,11 +1,11 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MongoClient } from 'mongodb';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import request from 'supertest';
 
 // The serverless entry keeps one app and one MongoDB client per function instance.
-let mongo: MongoMemoryServer;
-beforeAll(async () => { mongo = await MongoMemoryServer.create(); });
+let mongo: MongoMemoryReplSet;
+beforeAll(async () => { mongo = await MongoMemoryReplSet.create({ replSet: { count: 1 } }); });
 afterAll(async () => { await mongo.stop(); });
 
 // A fresh module per test, so the cached app of one test never leaks into the next.

@@ -1,5 +1,5 @@
 import { MongoClient, ObjectId, type Db } from 'mongodb';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import type { ModelTriage } from '@playnt/shared';
 import { createApp } from '../src/app.js';
 import { collections, setupCollections } from '../src/db.js';
@@ -31,7 +31,7 @@ export const triage = (over: Partial<ModelTriage> & { evidenceQuote: string }): 
 });
 
 export interface TestEnv {
-  server: MongoMemoryServer;
+  server: MongoMemoryReplSet;
   client: MongoClient;
   db: Db;
   provider: ScriptedProvider;
@@ -42,7 +42,8 @@ export interface TestEnv {
 }
 
 export async function startEnv(): Promise<TestEnv> {
-  const server = await MongoMemoryServer.create();
+  // A one-member replica set: intake and decisions write in transactions, as on Atlas.
+  const server = await MongoMemoryReplSet.create({ replSet: { count: 1 } });
   const client = new MongoClient(server.getUri());
   await client.connect();
   const db = client.db(`playnt_test_${new ObjectId().toHexString()}`);

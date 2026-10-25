@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { MongoServerError, ObjectId } from 'mongodb';
+import { type ClientSession, ObjectId } from 'mongodb';
 import type { AuditDoc, Collections } from './db.js';
 
 type NewEvent = Pick<AuditDoc, 'complaintId' | 'complaintRef' | 'type' | 'at' | 'actor' | 'summary' | 'payload'>;
@@ -22,21 +22,16 @@ export function hashEvent(e: Omit<AuditDoc, '_id' | 'hash'>): string {
 }
 
 // Append-only: this module offers append and read, nothing else. Each event links to the previous one by hash.
-export async function appendAudit(c: Collections, event: NewEvent): Promise<AuditDoc> {
-  for (let attempt = 0; attempt < 5; attempt++) {
-    const last = await c.audit.find({ complaintId: event.complaintId }).sort({ seq: -1 }).limit(1).next();
-    const body = { ...event, seq: (last?.seq ?? 0) + 1, prevHash: last?.hash ?? null };
-    const doc: AuditDoc = { _id: new ObjectId(), ...body, hash: hashEvent(body) };
-    try {
-      await c.audit.insertOne(doc);
-      return doc;
-    } catch (e) {
-      // Another writer took this sequence number: read the new tail and try again.
-      if (e instanceof MongoServerError && e.code === 11000) continue;
-      throw e;
-    }
-  }
-  throw new Error('Could not append audit event after 5 attempts.');
+// Runs inside the caller's transaction, together with the change it records, and moves the complaint's audit head
+// to the new event. Two writers on one complaint conflict on that document, and the transaction is retried.
+export async function appendAudit(c: Collections, event: NewEvent, session: ClientSession): Promise<AuditDoc> {
+  const last = await c.audit.find({ complaintId: event.complaintId }, { session }).sort({ seq: -1 }).limit(1).next();
+  const body = { ...event, seq: (last?.seq ?? 0) + 1, prevHash: last?.hash ?? null };
+  const doc: AuditDoc = { _id: new ObjectId(), ...body, hash: hashEvent(body) };
+  await c.audit.insertOne(doc, { session });
+  const res = await c.complaints.updateOne({ _id: event.complaintId }, { $set: { auditHead: { seq: doc.seq, hash: doc.hash } } }, { session });
+  if (res.matchedCount !== 1) throw new Error(`No complaint ${event.complaintRef} to record the audit event on.`);
+  return doc;
 }
 
 export interface ChainCheck {
@@ -48,8 +43,10 @@ export interface ChainCheck {
 export async function verifyChains(c: Collections): Promise<ChainCheck> {
   const broken: ChainCheck['broken'] = [];
   let events = 0;
-  const ids = await c.audit.distinct('complaintId');
-  for (const id of ids) {
+  const heads = new Map((await c.complaints.find({}, { projection: { ref: 1, auditHead: 1 } }).toArray()).map((d) => [d._id.toHexString(), d]));
+  const ids = new Map<string, ObjectId>((await c.audit.distinct('complaintId')).map((id) => [id.toHexString(), id]));
+  for (const d of heads.values()) if (d.auditHead) ids.set(d._id.toHexString(), d._id);
+  for (const [key, id] of ids) {
     let prev: AuditDoc | null = null;
     for await (const e of c.audit.find({ complaintId: id }).sort({ seq: 1 })) {
       events++;
@@ -60,6 +57,17 @@ export async function verifyChains(c: Collections): Promise<ChainCheck> {
       if (hashEvent(body) !== hash) broken.push({ complaintRef: e.complaintRef, seq: e.seq, problem: 'Content does not match its hash.' });
       prev = e;
     }
+    // The chain must end where the complaint says it ends: this catches a deleted last event, or a deleted chain.
+    const complaint = heads.get(key);
+    const head = complaint?.auditHead ?? null;
+    if (!complaint) {
+      broken.push({ complaintRef: prev!.complaintRef, seq: prev!.seq, problem: 'No complaint holds this chain.' });
+    } else if (head?.seq !== prev?.seq || head?.hash !== prev?.hash) {
+      broken.push({
+        complaintRef: complaint.ref, seq: head?.seq ?? prev?.seq ?? 0,
+        problem: prev ? `The chain ends at event ${prev.seq}, but the complaint records event ${head?.seq ?? 'none'} as the last.` : `The complaint records ${head?.seq} events, but none are stored.`,
+      });
+    }
   }
-  return { complaints: ids.length, events, broken };
+  return { complaints: ids.size, events, broken };
 }
