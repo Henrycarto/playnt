@@ -28,7 +28,7 @@ export const STATUS_LABEL: Record<ComplaintStatus, string> = {
 };
 
 export const ListQuerySchema = z.strictObject({
-  status: z.enum([...COMPLAINT_STATUSES, 'waiting', 'decided', 'all']).default('all'),
+  status: z.enum([...COMPLAINT_STATUSES, 'action', 'waiting', 'decided', 'all']).default('all'),
   deviceId: z.string().regex(/^[a-f0-9]{24}$/).optional(),
   serious: z.enum(['true', 'false']).optional(),
 });

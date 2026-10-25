@@ -3,14 +3,22 @@ import { expectNoAxeViolations, logSample, openByText } from './helpers';
 
 test.describe('complaint screen', () => {
   test('shows the seeded correction with its reason, the deadline and the audit trail', async ({ page }) => {
-    await openByText(page, /lot NB3-2610/);
+    await openByText(page, /potassium chloride/);
     await expect(page.locator('.dhead')).toContainText('Possible serious incident');
     await expect(page.locator('.dhead')).toContainText('Corrected');
-    await expect(page.getByText('Due Monday 2 November 2026, 23:59 Vienna')).toBeVisible();
-    await expect(page.locator('.decision .reason')).toContainText('Two users needed emergency eye irrigation');
+    await expect(page.getByText('Due Friday 30 October 2026, 23:59 Vienna')).toBeVisible();
+    await expect(page.locator('.decision .reason')).toContainText('The model treated this as a near miss');
     await expect(page.locator('.audit')).toContainText('Triage corrected');
-    await expect(page.locator('mark')).toHaveText('Two users had the solution in their eyes and needed eye irrigation at A&E.');
+    await expect(page.locator('mark')).toHaveText('A paediatric patient received an extra 8 mL of potassium chloride and needed cardiac monitoring overnight.');
     await expectNoAxeViolations(page);
+  });
+
+  test('shows a confirmed 10-day suggestion with its deadline and audit entry', async ({ page }) => {
+    await openByText(page, /lot NB3-2610/);
+    await expect(page.locator('.dhead')).toContainText('Confirmed');
+    await expect(page.getByText('Due Monday 2 November 2026, 23:59 Vienna')).toBeVisible();
+    await expect(page.locator('.audit')).toContainText('Triage confirmed');
+    await expect(page.locator('mark')).toHaveText('Two users had the solution in their eyes and needed eye irrigation at A&E.');
   });
 
   test('explains regulatory terms on focus and closes the tooltip with Escape', async ({ page }) => {
@@ -47,6 +55,8 @@ test.describe('complaint screen', () => {
     await expect(page.getByRole('button', { name: /Confirm triage/ })).toBeVisible();
     await page.keyboard.press('c');
     await expect(page.locator('.dhead')).toContainText('Confirmed');
+    // A decision made under the frozen demo clock shares the suggestion's timestamp and must still show.
+    await expect(page.locator('.decision')).toContainText('Confirmed by Quality engineer (demo)');
     await expect(page.locator('.audit li.fresh')).toContainText('Triage confirmed');
     await expect(page.locator('.notice')).toContainText(/Next waiting for a decision|No other complaint is waiting/);
   });

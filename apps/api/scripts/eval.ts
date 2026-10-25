@@ -3,7 +3,7 @@
 //        npm run eval -- --set dev   (development set, for prompt work)
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { parseModelOutput, type ModelTriage } from '@playnt/shared';
+import { parseModelOutput, wilson, type ModelTriage } from '@playnt/shared';
 import { loadConfig } from '../src/config.js';
 import { GeminiProvider } from '../src/triage/gemini.js';
 import { buildTriageRequest, PROMPT_VERSION } from '../src/triage/prompt.js';
@@ -66,10 +66,15 @@ function metrics(rows: typeof outputs) {
   const limitAgree = bothSerious.filter((r) => r.triage!.timeLimitDays === r.label.timeLimitDays).length;
   const tooLate = bothSerious.filter((r) => (r.triage!.timeLimitDays ?? 99) > (r.label.timeLimitDays ?? 99)).length;
   const round = (x: number) => Math.round(x * 1000) / 1000;
+  const ci = (k: number, n: number) => { const w = wilson(k, n); return w && [round(w.low), round(w.high)]; };
   return {
     n: rows.length,
     invalidOutputs: rows.filter((r) => !r.triage).length,
-    seriousIncidentFlag: { truePositives: tp, falsePositives: fp, falseNegatives: fn, precision: tp + fp ? round(tp / (tp + fp)) : null, recall: tp + fn ? round(tp / (tp + fn)) : null },
+    seriousIncidentFlag: {
+      truePositives: tp, falsePositives: fp, falseNegatives: fn,
+      precision: tp + fp ? round(tp / (tp + fp)) : null, precisionCi95: ci(tp, tp + fp),
+      recall: tp + fn ? round(tp / (tp + fn)) : null, recallCi95: ci(tp, tp + fn),
+    },
     complaintAgreement: round(rows.filter((r) => r.triage && r.triage.isComplaint === r.label.isComplaint).length / rows.length),
     timeLimit: {
       agreementWhereBothFlagged: bothSerious.length ? round(limitAgree / bothSerious.length) : null,
@@ -88,7 +93,7 @@ const result = {
   runDate: new Date().toISOString(),
   labelsSha256: sha(setPath),
   devicesSha256: sha('eval/devices.json'),
-  note: 'Invalid model output counts as not flagged. Labels are one reviewer\'s reading of MDR Art. 87 and MDCG 2023-3, not ground truth.',
+  note: 'Invalid model output counts as not flagged. Labels are one reviewer\'s reading of MDR Art. 87 and MDCG 2023-3, not ground truth. Ci95 is the 95% Wilson score interval.',
   metrics: { all: metrics(outputs), clear: set === 'dev' ? null : metrics(outputs.filter((o) => o.difficulty === 'clear')), ambiguous: set === 'dev' ? null : metrics(outputs.filter((o) => o.difficulty === 'ambiguous')) },
   items: outputs,
 };

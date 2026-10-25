@@ -12,7 +12,7 @@ export function NewComplaint() {
   useTitle('Log complaint');
   const navigate = useNavigate();
   const health = useHealth();
-  const [devices] = useLoad<DeviceView[]>(() => api.devices(), []);
+  const [devices, reloadDevices] = useLoad<DeviceView[]>(() => api.devices(), []);
   const [samples] = useLoad(() => api.samples(), []);
   const [v, setV] = useState<ComplaintInput>({ deviceId: '', text: '', reporterRole: '', reporterCountry: 'Austria', channel: 'phone', awarenessDate: '' });
   const [errors, setErrors] = useState<Partial<Record<Field | 'form', string>>>({});
@@ -75,12 +75,17 @@ export function NewComplaint() {
           <div className="hint">Any other text is saved and goes to manual triage, because demo mode has no recorded response for it.</div>
         </div>
       )}
+      {devices.state === 'error' && (
+        <div className="alert" role="alert" style={{ marginBottom: 16 }}>
+          <strong>The device list could not be loaded.</strong> {devices.error.message} Nothing can be logged without a device. <button type="button" className="btn" style={{ marginLeft: 8 }} onClick={reloadDevices}>Try again</button>
+        </div>
+      )}
       <form className="panel pbody stackform" onSubmit={submit} noValidate ref={form}>
         <div className="formgrid">
           <div>
             <label className="lbl" htmlFor="deviceId">Device</label>
-            <select {...fieldProps('deviceId')} className="select wide" value={v.deviceId} onChange={up('deviceId')}>
-              <option value="">Choose a device</option>
+            <select {...fieldProps('deviceId')} className="select wide" value={v.deviceId} onChange={up('deviceId')} disabled={devices.state !== 'ready'}>
+              <option value="">{devices.state === 'loading' ? 'Loading devices' : devices.state === 'error' ? 'Devices not available' : 'Choose a device'}</option>
               {devices.state === 'ready' && devices.data.map((d) => <option key={d.id} value={d.id}>{d.name}, class {d.riskClass}</option>)}
             </select>
             {err('deviceId') || <div className="hint" id="h-deviceId">The device's risk file is sent to the model with the text.</div>}

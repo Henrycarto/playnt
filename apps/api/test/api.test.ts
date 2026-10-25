@@ -263,6 +263,15 @@ describe('retry after a model failure', () => {
     expect((await request(env.app).get('/api/complaints?status=waiting')).body).toHaveLength(1);
     expect((await request(env.app).get('/api/complaints?status=decided')).body).toHaveLength(1);
   });
+
+  it('keeps an unreported possible serious incident under needs action until the report is recorded', async () => {
+    const a = (await post(complaintBody(env.devices['IV-220']!, { awarenessDate: '2026-10-20' }))).body;
+    await decideOn(a.id, { action: 'confirm' });
+    const action = async () => (await request(env.app).get('/api/complaints?status=action')).body.map((c: { id: string }) => c.id);
+    expect(await action()).toContain(a.id);
+    await request(env.app).post(`/api/complaints/${a.id}/report`).send({ submittedOn: '2026-10-22' });
+    expect(await action()).not.toContain(a.id);
+  });
 });
 
 describe('recording the serious incident report', () => {

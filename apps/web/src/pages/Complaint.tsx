@@ -8,7 +8,7 @@ import { api, RequestError } from '../api';
 import { CorrectForm } from '../components/CorrectForm';
 import { Icon } from '../components/Icon';
 import { isTyping } from '../components/Shortcuts';
-import { Flag, fmtDay, TriageStatus } from '../components/Status';
+import { capFirst, Flag, fmtDay, TriageStatus } from '../components/Status';
 import { Term } from '../components/Term';
 import { useHealth, useLoad, useTitle } from '../hooks';
 import { isWaiting } from './Queue';
@@ -28,7 +28,7 @@ const longDate = (day: string) => {
   const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';
   return `${get('weekday')} ${get('day')} ${get('month')} ${get('year')}`;
 };
-const stamp = (iso: string) => new Date(iso).toLocaleString('en-GB', { timeZone: 'Europe/Vienna', weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).replace(',', '');
+const stamp = (iso: string) => new Date(iso).toLocaleString('en-GB', { timeZone: 'Europe/Vienna', weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).replace(',', '').replace('Sept', 'Sep');
 
 function ReportControl({ c, now, onSaved }: { c: ComplaintDetail; now: string; onSaved: (d: ComplaintDetail) => void }) {
   const [on, setOn] = useState(viennaDate(now));
@@ -118,7 +118,7 @@ function SuggestionView({ s }: { s: ModelSuggestionEntry }) {
         <div className="field"><dt>Possible <Term k="seriousIncident">serious incident</Term></dt><dd className={t.possibleSeriousIncident ? 'serious' : ''}>{t.possibleSeriousIncident ? 'Yes' : 'No'}</dd></div>
         <div className="field"><dt>Outcome</dt><dd>{OUTCOME_LABEL[t.seriousOutcome]}</dd></div>
         <div className="field"><dt>Time limit</dt><dd>{t.timeLimitDays ? `${t.timeLimitDays} days, ${LIMIT_ARTICLE[t.timeLimitDays]}` : 'None'}</dd></div>
-        <div className="field"><dt>Problem</dt><dd>{t.problemDescription}</dd></div>
+        <div className="field"><dt>Problem</dt><dd>{capFirst(t.problemDescription)}</dd></div>
       </dl>
       <blockquote className="quote" style={{ marginInline: 0 }}>{t.evidenceQuote}</blockquote>
       <p className="rationale">{t.rationale}</p>
@@ -196,7 +196,8 @@ export function ComplaintPage() {
   const decision = [...c.triageHistory].reverse().find((h): h is HumanDecisionEntry => h.kind === 'human_decision');
   const current = decision?.triage ?? suggestion.triage;
   const quote = current?.evidenceQuote ?? suggestion.triage?.evidenceQuote ?? null;
-  const decidedLater = decision && decision.at > suggestion.at;
+  // History is append-only, so position, not timestamp, says which came last (the demo clock is frozen).
+  const decidedLater = decision && c.triageHistory.indexOf(decision) > c.triageHistory.indexOf(suggestion);
 
   return (
     <>

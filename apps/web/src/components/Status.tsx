@@ -21,8 +21,11 @@ export function TriageStatus({ status, long = false }: { status: ComplaintStatus
   return <span className={`tstatus ${s.cls}`}><Icon name={s.icon} />{long && status === 'suggested' ? 'Suggested, waiting for a decision' : s.text}</span>;
 }
 
+// Problem descriptions are stored as written by the model or the engineer; only the display starts them with a capital.
+export const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
 export const fmtDay = (iso: string) =>
-  new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }).replace(',', '');
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }).replace(',', '').replace('Sept', 'Sep'); // en-GB writes "Sept"
 
 // Compact day row for the queue, capped at 120 px so 15-day rows stay small.
 export function DayTrack({ awarenessDate, limitDays, now }: { awarenessDate: string; limitDays: 2 | 10 | 15; now: string }) {

@@ -233,7 +233,9 @@ const toSummary = (r: SummaryRow): ComplaintSummary => ({
 
 export async function listComplaints(deps: Deps, q: { status: string; deviceId?: string | undefined; serious?: 'true' | 'false' | undefined }): Promise<ComplaintSummary[]> {
   const match: Document = {};
-  if (q.status === 'waiting') match.status = { $in: ['suggested', 'needs_manual_triage'] };
+  // Needs action: a triage decision is missing, or a possible serious incident has not been reported yet.
+  if (q.status === 'action') match.$or = [{ status: { $in: ['suggested', 'needs_manual_triage'] } }, { 'current.possibleSeriousIncident': true, report: { $in: [null] } }];
+  else if (q.status === 'waiting') match.status = { $in: ['suggested', 'needs_manual_triage'] };
   else if (q.status === 'decided') match.status = { $in: ['confirmed', 'corrected'] };
   else if (q.status !== 'all') match.status = q.status;
   if (q.deviceId) match.deviceId = new ObjectId(q.deviceId);

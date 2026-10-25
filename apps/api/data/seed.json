@@ -314,6 +314,28 @@
       }
     },
     {
+      "device": "IV-220",
+      "awarenessDate": "2026-10-20",
+      "receivedAt": "2026-10-20T15:10:00Z",
+      "reporterRole": "Paediatric nurse",
+      "channel": "phone",
+      "text": "The IV-220 kept running for about 15 minutes after I pressed stop. A paediatric patient received an extra 8 mL of potassium chloride and needed cardiac monitoring overnight. The pump has been taken out of service.",
+      "decision": {
+        "action": "correct",
+        "at": "2026-10-21T08:15:00Z",
+        "triage": {
+          "isComplaint": true,
+          "possibleSeriousIncident": true,
+          "seriousOutcome": "serious_deterioration_unanticipated",
+          "timeLimitDays": 10,
+          "problemDescription": "Pump keeps infusing after stop is pressed",
+          "evidenceQuote": "A paediatric patient received an extra 8 mL of potassium chloride and needed cardiac monitoring overnight.",
+          "rationale": "Overnight cardiac monitoring after a potassium overdose is medical intervention to prevent a life-threatening arrhythmia; failure to stop on command is not in the IV-220 risk file."
+        },
+        "reason": "The model treated this as a near miss, but harm already happened: the child received extra potassium chloride and needed overnight cardiac monitoring to catch a life-threatening arrhythmia. Intervention to prevent life-threatening injury is a serious deterioration under MDCG 2023-3 Q2. The IV-220 risk file lists over-infusion from free-flow with a misloaded cassette, not a pump that keeps running after stop, so it is unanticipated: 10 days under Art. 87(5), not 15."
+      }
+    },
+    {
       "device": "NB-3",
       "awarenessDate": "2026-10-13",
       "receivedAt": "2026-10-13T15:40:00Z",
@@ -330,18 +352,8 @@
       "channel": "phone",
       "text": "Our pharmacy has had three calls this week from home users of the NB-3, all with devices from lot NB3-2610. The medication reservoir cracks at the seam and the solution runs onto the face mask during treatment. Two users had the solution in their eyes and needed eye irrigation at A&E. A third user stopped treatment. We have taken the remaining stock from this lot off the shelf.",
       "decision": {
-        "action": "correct",
-        "at": "2026-10-25T08:30:00Z",
-        "triage": {
-          "isComplaint": true,
-          "possibleSeriousIncident": true,
-          "seriousOutcome": "serious_deterioration_unanticipated",
-          "timeLimitDays": 10,
-          "problemDescription": "Medication reservoir cracks at the seam",
-          "evidenceQuote": "Two users had the solution in their eyes and needed eye irrigation at A&E.",
-          "rationale": "Emergency eye irrigation is medical intervention to prevent impairment; reservoir cracking is not in the NB-3 risk file."
-        },
-        "reason": "Two users needed emergency eye irrigation, which is a serious deterioration under MDCG 2023-3 Q2. Reservoir cracking is not among the NB-3 anticipated harms, so it is unanticipated: 10 days under Art. 87(5). Three reports from one lot with stock already quarantined do not show an imminent risk of multiple deaths or a wider public health hazard, so not a serious public health threat. Lot investigation opened."
+        "action": "confirm",
+        "at": "2026-10-25T08:30:00Z"
       }
     },
     {
@@ -367,9 +379,9 @@
   "samples": [
     {
       "device": "IV-220",
-      "reporterRole": "Paediatric nurse",
+      "reporterRole": "Ward nurse",
       "channel": "phone",
-      "text": "The IV-220 kept running for about 15 minutes after I pressed stop. A paediatric patient received an extra 8 mL of potassium chloride and needed cardiac monitoring overnight. The pump has been taken out of service."
+      "text": "The occlusion alarm on one IV-220 went off twice during the night shift with no occlusion in the line. Each time we checked the line, restarted the infusion within a minute and the patient was fine."
     },
     {
       "device": "PX-40",

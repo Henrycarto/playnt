@@ -1,0 +1,972 @@
+{
+  "set": "eval",
+  "model": "gemini-3.8-flash",
+  "promptVersion": "triage-v1",
+  "runDate": "2026-10-25T09:10:31.690Z",
+  "labelsSha256": "56e1d8ae0342a01bce3236e2a8cfcc311091739d5758c9b396c972c33c45c3ae",
+  "devicesSha256": "4422d15bb20c7a408602e0f5129c508b25995c78735d1a52d75c5c6206f9011f",
+  "note": "Invalid model output counts as not flagged. Labels are one reviewer's reading of MDR Art. 87 and MDCG 2023-3, not ground truth. Ci95 is the 95% Wilson score interval.",
+  "metrics": {
+    "all": {
+      "n": 40,
+      "invalidOutputs": 0,
+      "seriousIncidentFlag": {
+        "truePositives": 21,
+        "falsePositives": 2,
+        "falseNegatives": 0,
+        "precision": 0.913,
+        "precisionCi95": [
+          0.732,
+          0.976
+        ],
+        "recall": 1,
+        "recallCi95": [
+          0.845,
+          1
+        ]
+      },
+      "complaintAgreement": 1,
+      "timeLimit": {
+        "agreementWhereBothFlagged": 1,
+        "agreementOverLabelledSerious": 1,
+        "bothFlagged": 21,
+        "modelLimitLongerThanLabel": 0
+      }
+    },
+    "clear": {
+      "n": 28,
+      "invalidOutputs": 0,
+      "seriousIncidentFlag": {
+        "truePositives": 14,
+        "falsePositives": 1,
+        "falseNegatives": 0,
+        "precision": 0.933,
+        "precisionCi95": [
+          0.702,
+          0.988
+        ],
+        "recall": 1,
+        "recallCi95": [
+          0.785,
+          1
+        ]
+      },
+      "complaintAgreement": 1,
+      "timeLimit": {
+        "agreementWhereBothFlagged": 1,
+        "agreementOverLabelledSerious": 1,
+        "bothFlagged": 14,
+        "modelLimitLongerThanLabel": 0
+      }
+    },
+    "ambiguous": {
+      "n": 12,
+      "invalidOutputs": 0,
+      "seriousIncidentFlag": {
+        "truePositives": 7,
+        "falsePositives": 1,
+        "falseNegatives": 0,
+        "precision": 0.875,
+        "precisionCi95": [
+          0.529,
+          0.978
+        ],
+        "recall": 1,
+        "recallCi95": [
+          0.646,
+          1
+        ]
+      },
+      "complaintAgreement": 1,
+      "timeLimit": {
+        "agreementWhereBothFlagged": 1,
+        "agreementOverLabelledSerious": 1,
+        "bothFlagged": 7,
+        "modelLimitLongerThanLabel": 0
+      }
+    }
+  },
+  "items": [
+    {
+      "id": "EV-01",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 10,
+        "difficulty": "clear",
+        "basis": "Malfunction, death, causal link reasonably possible. Art. 87(5): death, 10 days."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"death\",\"timeLimitDays\":10,\"problemDescription\":\"Uncontrolled massive over-infusion leading to patient death\",\"evidenceQuote\":\"Patient went into cardiac arrest and died despite resuscitation.\",\"rationale\":\"A patient died following an uncontrolled infusion of noradrenaline, and device involvement cannot be excluded, requiring reporting within 10 days.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "death",
+        "timeLimitDays": 10,
+        "problemDescription": "Uncontrolled massive over-infusion leading to patient death",
+        "rationale": "A patient died following an uncontrolled infusion of noradrenaline, and device involvement cannot be excluded, requiring reporting within 10 days.",
+        "evidenceQuote": "Patient went into cardiac arrest and died despite resuscitation."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-02",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 10,
+        "difficulty": "clear",
+        "basis": "Serious deterioration (ICU admission). A silent stop with a frozen display is not in the risk file (only delayed occlusion alarm is), so unanticipated. Art. 87(5): 10 days."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"serious_deterioration_unanticipated\",\n  \"timeLimitDays\": 10,\n  \"problemDescription\": \"Display froze and delivery stopped without alarm\",\n  \"evidenceQuote\": \"The patient developed diabetic ketoacidosis and was moved to intensive care.\",\n  \"rationale\": \"The pump stopped delivering insulin without an alarm, leading to diabetic ketoacidosis and transfer to intensive care from an unanticipated failure mode.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "serious_deterioration_unanticipated",
+        "timeLimitDays": 10,
+        "problemDescription": "Display froze and delivery stopped without alarm",
+        "rationale": "The pump stopped delivering insulin without an alarm, leading to diabetic ketoacidosis and transfer to intensive care from an unanticipated failure mode.",
+        "evidenceQuote": "The patient developed diabetic ketoacidosis and was moved to intensive care."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-03",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 15,
+        "difficulty": "clear",
+        "basis": "Malfunction that might have led to serious deterioration if it happened again (MDCG 2023-3 Q2 criterion B). No death or deterioration occurred. Art. 87(3): 15 days."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Air-in-line alarm failed to detect air column\",\n  \"evidenceQuote\": \"The air-in-line alarm did not go off.\",\n  \"rationale\": \"Although user intervention prevented harm, an undetected air bolus could cause a serious or life-threatening air embolism if the malfunction recurs.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "might_have_led",
+        "timeLimitDays": 15,
+        "problemDescription": "Air-in-line alarm failed to detect air column",
+        "rationale": "Although user intervention prevented harm, an undetected air bolus could cause a serious or life-threatening air embolism if the malfunction recurs.",
+        "evidenceQuote": "The air-in-line alarm did not go off."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-04",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 15,
+        "difficulty": "clear",
+        "basis": "Serious deterioration, but free-flow from incorrect cassette loading is an anticipated harm in the risk file. Not death, not unanticipated. Art. 87(3): 15 days."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"serious_deterioration_anticipated\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Over-infusion caused by improperly seated cassette\",\n  \"evidenceQuote\": \"The patient started bleeding from the line site and gums and needed a blood transfusion.\",\n  \"rationale\": \"An incorrectly seated cassette led to heparin over-infusion resulting in bleeding that required a blood transfusion, which is an anticipated serious deterioration.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "serious_deterioration_anticipated",
+        "timeLimitDays": 15,
+        "problemDescription": "Over-infusion caused by improperly seated cassette",
+        "rationale": "An incorrectly seated cassette led to heparin over-infusion resulting in bleeding that required a blood transfusion, which is an anticipated serious deterioration.",
+        "evidenceQuote": "The patient started bleeding from the line site and gums and needed a blood transfusion."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-05",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 10,
+        "difficulty": "clear",
+        "basis": "Indirect harm through a decision based on device output (MDCG 2023-3 Q2, Q7). Death. Art. 87(5): 10 days."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"death\",\n  \"timeLimitDays\": 10,\n  \"problemDescription\": \"Falsely normal SpO2 reading leading to delayed medical treatment\",\n  \"evidenceQuote\": \"He died in hospital two days later.\",\n  \"rationale\": \"The patient died following a potentially inaccurate SpO2 reading that delayed seeking emergency care, and device involvement cannot be reasonably excluded.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "death",
+        "timeLimitDays": 10,
+        "problemDescription": "Falsely normal SpO2 reading leading to delayed medical treatment",
+        "rationale": "The patient died following a potentially inaccurate SpO2 reading that delayed seeking emergency care, and device involvement cannot be reasonably excluded.",
+        "evidenceQuote": "He died in hospital two days later."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-06",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 15,
+        "difficulty": "clear",
+        "basis": "Hospitalisation is a serious deterioration (MDCG 2023-3 Q2). Inaccurate reading with cold extremities is an anticipated harm. Art. 87(3): 15 days."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"serious_deterioration_anticipated\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Inaccurate SpO2 reading leading to delayed treatment and hospitalisation\",\n  \"evidenceQuote\": \"The visit to us was delayed by a day and the child was admitted for oxygen therapy.\",\n  \"rationale\": \"The inaccurate SpO2 reading resulted in delayed treatment and subsequent hospital admission for oxygen therapy, representing an anticipated serious deterioration of health.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "serious_deterioration_anticipated",
+        "timeLimitDays": 15,
+        "problemDescription": "Inaccurate SpO2 reading leading to delayed treatment and hospitalisation",
+        "rationale": "The inaccurate SpO2 reading resulted in delayed treatment and subsequent hospital admission for oxygen therapy, representing an anticipated serious deterioration of health.",
+        "evidenceQuote": "The visit to us was delayed by a day and the child was admitted for oxygen therapy."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-07",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 10,
+        "difficulty": "clear",
+        "basis": "Death. Entrapment is anticipated, but Art. 87(5) applies to any death: 10 days."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"death\",\"timeLimitDays\":10,\"problemDescription\":\"Patient entrapment between side rail and mattress resulting in death\",\"evidenceQuote\":\"She was unresponsive and was pronounced dead by the emergency doctor.\",\"rationale\":\"A patient died after being trapped between the device's side rail and mattress, which constitutes a serious incident with a fatal outcome.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "death",
+        "timeLimitDays": 10,
+        "problemDescription": "Patient entrapment between side rail and mattress resulting in death",
+        "rationale": "A patient died after being trapped between the device's side rail and mattress, which constitutes a serious incident with a fatal outcome.",
+        "evidenceQuote": "She was unresponsive and was pronounced dead by the emergency doctor."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-08",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 15,
+        "difficulty": "clear",
+        "basis": "Fracture of a user is a serious deterioration. Uncommanded movement from a damaged handset is anticipated. Art. 87(3): 15 days."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"serious_deterioration_anticipated\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Uncommanded bed movement causing toe fracture\",\n  \"evidenceQuote\": \"X-ray showed a fracture of two toes.\",\n  \"rationale\": \"The device experienced an uncommanded movement from a damaged handset that caused a bone fracture, which is an anticipated harm resulting in a serious deterioration of health.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "serious_deterioration_anticipated",
+        "timeLimitDays": 15,
+        "problemDescription": "Uncommanded bed movement causing toe fracture",
+        "rationale": "The device experienced an uncommanded movement from a damaged handset that caused a bone fracture, which is an anticipated harm resulting in a serious deterioration of health.",
+        "evidenceQuote": "X-ray showed a fracture of two toes."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-09",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 10,
+        "difficulty": "clear",
+        "basis": "Serious deterioration needing surgery. Structural collapse is not in the risk file: unanticipated. Art. 87(5): 10 days."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"serious_deterioration_unanticipated\",\n  \"timeLimitDays\": 10,\n  \"problemDescription\": \"Actuator bracket snapped causing sudden head section collapse\",\n  \"evidenceQuote\": \"The patient suffered a cervical spine injury and had surgery the next day.\",\n  \"rationale\": \"A structural failure led to a cervical spine injury requiring surgery, which constitutes an unanticipated serious deterioration of health.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "serious_deterioration_unanticipated",
+        "timeLimitDays": 10,
+        "problemDescription": "Actuator bracket snapped causing sudden head section collapse",
+        "rationale": "A structural failure led to a cervical spine injury requiring surgery, which constitutes an unanticipated serious deterioration of health.",
+        "evidenceQuote": "The patient suffered a cervical spine injury and had surgery the next day."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-10",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 2,
+        "difficulty": "clear",
+        "basis": "Lot-wide contamination across countries in a vulnerable population: significant and unexpected, alarming as a potential public health hazard (MDCG 2023-3 Q2, Art. 2(66)). Art. 87(4): 2 days."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"public_health_threat\",\n  \"timeLimitDays\": 2,\n  \"problemDescription\": \"Microbial contamination of nebuliser medication reservoirs\",\n  \"evidenceQuote\": \"Distributors in three countries report sealed new NB-3 units from lot NB3-2609 with Pseudomonas found in the medication reservoir.\",\n  \"rationale\": \"Widespread Pseudomonas contamination of sealed respiratory devices across multiple countries that has already caused hospitalisations represents an alarming public health hazard requiring prompt remedial action.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "public_health_threat",
+        "timeLimitDays": 2,
+        "problemDescription": "Microbial contamination of nebuliser medication reservoirs",
+        "rationale": "Widespread Pseudomonas contamination of sealed respiratory devices across multiple countries that has already caused hospitalisations represents an alarming public health hazard requiring prompt remedial action.",
+        "evidenceQuote": "Distributors in three countries report sealed new NB-3 units from lot NB3-2609 with Pseudomonas found in the medication reservoir."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-11",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 2,
+        "difficulty": "clear",
+        "basis": "Fleet-wide systematic fault with possibility of multiple deaths at short intervals (MDCG 2023-3 Q2 on serious public health threat). Art. 87(4): 2 days."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"public_health_threat\",\n  \"timeLimitDays\": 2,\n  \"problemDescription\": \"Infusion pumps delivering double the programmed rate following a clock change\",\n  \"evidenceQuote\": \"Since the clock change on Sunday, pumps on firmware 4.2 at our hospital and two others in the region deliver double the programmed rate.\",\n  \"rationale\": \"A widespread firmware malfunction causing pumps across multiple regional hospitals to deliver double the rate creates an imminent risk of multiple serious patient harms or deaths requiring prompt remedial action.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "public_health_threat",
+        "timeLimitDays": 2,
+        "problemDescription": "Infusion pumps delivering double the programmed rate following a clock change",
+        "rationale": "A widespread firmware malfunction causing pumps across multiple regional hospitals to deliver double the rate creates an imminent risk of multiple serious patient harms or deaths requiring prompt remedial action.",
+        "evidenceQuote": "Since the clock change on Sunday, pumps on firmware 4.2 at our hospital and two others in the region deliver double the programmed rate."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-12",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 10,
+        "difficulty": "clear",
+        "basis": "Serious deterioration needing surgery. Not an expected side-effect (only mild irritation and maceration are documented): unanticipated. Art. 87(5): 10 days."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"serious_deterioration_unanticipated\",\n  \"timeLimitDays\": 10,\n  \"problemDescription\": \"Full-thickness skin injury requiring skin graft\",\n  \"evidenceQuote\": \"Plastic surgery performed a skin graft.\",\n  \"rationale\": \"The device was associated with a full-thickness skin injury requiring surgical intervention, representing an unanticipated serious deterioration of state of health.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "serious_deterioration_unanticipated",
+        "timeLimitDays": 10,
+        "problemDescription": "Full-thickness skin injury requiring skin graft",
+        "rationale": "The device was associated with a full-thickness skin injury requiring surgical intervention, representing an unanticipated serious deterioration of state of health.",
+        "evidenceQuote": "Plastic surgery performed a skin graft."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-13",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 15,
+        "difficulty": "clear",
+        "basis": "Malfunction that might have led to serious injury (fire). No harm occurred. Art. 87(3): 15 days."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"might_have_led\",\"timeLimitDays\":15,\"problemDescription\":\"Battery pack swelling and smoking during charging\",\"evidenceQuote\":\"The battery pack swelled up and started smoking while charging on my bedside table.\",\"rationale\":\"While no injury occurred, a thermal failure causing a battery to swell and smoke creates a fire hazard that could lead to serious harm or death if repeated.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "might_have_led",
+        "timeLimitDays": 15,
+        "problemDescription": "Battery pack swelling and smoking during charging",
+        "rationale": "While no injury occurred, a thermal failure causing a battery to swell and smoke creates a fire hazard that could lead to serious harm or death if repeated.",
+        "evidenceQuote": "The battery pack swelled up and started smoking while charging on my bedside table."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-14",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 15,
+        "difficulty": "clear",
+        "basis": "Malfunction that might have led to serious deterioration; no lasting harm. Art. 87(3): 15 days."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"might_have_led\",\"timeLimitDays\":15,\"problemDescription\":\"Battery depletion without low-battery warning\",\"evidenceQuote\":\"During transfer to the cath lab the pump battery went flat with no low-battery warning.\",\"rationale\":\"The pump unexpectedly stopped infusing a critical vasopressor without warning, an incident that might lead to serious health deterioration or death if repeated or uncorrected.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "might_have_led",
+        "timeLimitDays": 15,
+        "problemDescription": "Battery depletion without low-battery warning",
+        "rationale": "The pump unexpectedly stopped infusing a critical vasopressor without warning, an incident that might lead to serious health deterioration or death if repeated or uncorrected.",
+        "evidenceQuote": "During transfer to the cath lab the pump battery went flat with no low-battery warning."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-15",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Information request. No deficiency alleged."
+      },
+      "raw": "{\"isComplaint\":false,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Request for service manual and calibration interval\",\"evidenceQuote\":\"Could you send the current service manual as PDF and confirm the recommended calibration interval?\",\"rationale\":\"The communication is a general administrative request for service documentation and does not allege any device deficiency.\"}",
+      "triage": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Request for service manual and calibration interval",
+        "rationale": "The communication is a general administrative request for service documentation and does not allege any device deficiency.",
+        "evidenceQuote": "Could you send the current service manual as PDF and confirm the recommended calibration interval?"
+      },
+      "error": null
+    },
+    {
+      "id": "EV-16",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Commercial enquiry."
+      },
+      "raw": "{\"isComplaint\":false,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Price and delivery inquiry\",\"evidenceQuote\":\"What is your price for 200 units and how long is delivery to Graz at the moment?\",\"rationale\":\"The communication is a commercial sales inquiry regarding pricing and shipping timelines, alleging no deficiency with the device.\"}",
+      "triage": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Price and delivery inquiry",
+        "rationale": "The communication is a commercial sales inquiry regarding pricing and shipping timelines, alleging no deficiency with the device.",
+        "evidenceQuote": "What is your price for 200 units and how long is delivery to Graz at the moment?"
+      },
+      "error": null
+    },
+    {
+      "id": "EV-17",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Praise and a feature request. No deficiency alleged."
+      },
+      "raw": "{\"isComplaint\":false,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Feature suggestion for a cup holder on the side rail\",\"evidenceQuote\":\"A cup holder on the side rail would be a nice addition.\",\"rationale\":\"The communication provides positive feedback and a feature request without alleging any deficiency in device quality, safety, or performance.\"}",
+      "triage": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Feature suggestion for a cup holder on the side rail",
+        "rationale": "The communication provides positive feedback and a feature request without alleging any deficiency in device quality, safety, or performance.",
+        "evidenceQuote": "A cup holder on the side rail would be a nice addition."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-18",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Question about use. No deficiency alleged."
+      },
+      "raw": "{\"isComplaint\":false,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Customer inquiry regarding compatible inhalation solutions\",\"evidenceQuote\":\"Can I use it in the NB-3 or only the solutions listed in the leaflet?\",\"rationale\":\"The communication is a general inquiry regarding medication compatibility and does not allege any deficiency in the device's quality, safety, or performance.\"}",
+      "triage": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Customer inquiry regarding compatible inhalation solutions",
+        "rationale": "The communication is a general inquiry regarding medication compatibility and does not allege any deficiency in the device's quality, safety, or performance.",
+        "evidenceQuote": "Can I use it in the NB-3 or only the solutions listed in the leaflet?"
+      },
+      "error": null
+    },
+    {
+      "id": "EV-19",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Document request."
+      },
+      "raw": "{\"isComplaint\":false,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Request for a copy of current certificate\",\"evidenceQuote\":\"Please send us a copy of the current certificate for the WD-12 range.\",\"rationale\":\"This is an administrative request for documentation and alleges no deficiency in the device or service.\"}",
+      "triage": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Request for a copy of current certificate",
+        "rationale": "This is an administrative request for documentation and alleges no deficiency in the device or service.",
+        "evidenceQuote": "Please send us a copy of the current certificate for the WD-12 range."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-20",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Delivery service issue that does not affect device performance. Outside the complaint definition quoted in MDCG 2023-3."
+      },
+      "raw": "{\n  \"isComplaint\": false,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Delayed delivery and courier conduct\",\n  \"evidenceQuote\": \"The oximeter itself is fine.\",\n  \"rationale\": \"The feedback concerns delivery logistics and customer service without alleging any deficiency in device quality, safety, or performance.\"\n}",
+      "triage": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Delayed delivery and courier conduct",
+        "rationale": "The feedback concerns delivery logistics and customer service without alleging any deficiency in device quality, safety, or performance.",
+        "evidenceQuote": "The oximeter itself is fine."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-21",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Alleges a quality deficiency in the supplied product (packaging). No malfunction, no harm possible."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Dented outer carton on arrival\",\"evidenceQuote\":\"The outer carton of the bed was badly dented on arrival.\",\"rationale\":\"While the damaged packaging represents a quality complaint, the bed itself was undamaged and functions normally, presenting no serious incident.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Dented outer carton on arrival",
+        "rationale": "While the damaged packaging represents a quality complaint, the bed itself was undamaged and functions normally, presenting no serious incident.",
+        "evidenceQuote": "The outer carton of the bed was badly dented on arrival."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-22",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Durability complaint. Readings still legible indoors, no harm plausible."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Display scratched and hard to read in daylight\",\"evidenceQuote\":\"After one month the display is covered in scratches and hard to read in daylight.\",\"rationale\":\"The issue involves cosmetic wear and readability under specific lighting conditions without posing a risk of death or serious deterioration in health.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Display scratched and hard to read in daylight",
+        "rationale": "The issue involves cosmetic wear and readability under specific lighting conditions without posing a risk of death or serious deterioration in health.",
+        "evidenceQuote": "After one month the display is covered in scratches and hard to read in daylight."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-23",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Cosmetic durability complaint."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Mouthpiece discolouration after cleaning\",\"evidenceQuote\":\"The mouthpiece has faded from blue to grey after cleaning it exactly as the leaflet says.\",\"rationale\":\"Cosmetic colour fading following recommended cleaning does not affect device safety or performance and poses no risk of serious harm.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Mouthpiece discolouration after cleaning",
+        "rationale": "Cosmetic colour fading following recommended cleaning does not affect device safety or performance and poses no risk of serious harm.",
+        "evidenceQuote": "The mouthpiece has faded from blue to grey after cleaning it exactly as the leaflet says."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-24",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Usability complaint. Device works as specified; a loud alarm does not create a path to serious harm."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Alarm volume considered too loud\",\"evidenceQuote\":\"The end-of-infusion alarm is so loud at night that it wakes the whole bay.\",\"rationale\":\"The report describes a usability concern regarding alarm loudness that does not pose any risk of serious deterioration in health.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Alarm volume considered too loud",
+        "rationale": "The report describes a usability concern regarding alarm loudness that does not pose any risk of serious deterioration in health.",
+        "evidenceQuote": "The end-of-infusion alarm is so loud at night that it wakes the whole bay."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-25",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Expected, documented side-effect (an incident per MDCG 2023-3 Q10), not serious. Subject to trend reporting under Art. 88, not Art. 87."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Mild skin redness around the wound\",\"evidenceQuote\":\"Mild redness on the skin around the wound after a week of use.\",\"rationale\":\"The event represents an expected, non-serious side-effect that resolved spontaneously without requiring medical intervention, so it does not meet the criteria for a serious incident.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Mild skin redness around the wound",
+        "rationale": "The event represents an expected, non-serious side-effect that resolved spontaneously without requiring medical intervention, so it does not meet the criteria for a serious incident.",
+        "evidenceQuote": "Mild redness on the skin around the wound after a week of use."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-26",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Alleged performance deficiency. A 2 point difference within stated accuracy does not plausibly lead to serious harm."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Reading 2 percent lower than bedside monitor\",\n  \"evidenceQuote\": \"The PX-40 reads 2 percent lower than our bedside monitor on most patients.\",\n  \"rationale\": \"A 2 percent discrepancy falls within typical oximeter accuracy tolerances and presents no risk of serious health deterioration.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Reading 2 percent lower than bedside monitor",
+        "rationale": "A 2 percent discrepancy falls within typical oximeter accuracy tolerances and presents no risk of serious health deterioration.",
+        "evidenceQuote": "The PX-40 reads 2 percent lower than our bedside monitor on most patients."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-27",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Usability complaint, no harm described or plausible."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Handset cable is too short\",\"evidenceQuote\":\"The handset cable is too short.\",\"rationale\":\"The issue is an ergonomic usability complaint regarding cable length that does not present a risk of death or serious deterioration in health.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Handset cable is too short",
+        "rationale": "The issue is an ergonomic usability complaint regarding cable length that does not present a risk of death or serious deterioration in health.",
+        "evidenceQuote": "The handset cable is too short."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-28",
+      "difficulty": "clear",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "clear",
+        "basis": "Malfunction detected before use, fails safe, non-critical therapy. No plausible path to serious harm."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Nebuliser fails to switch on\",\n  \"evidenceQuote\": \"The nebuliser would not switch on when I checked it before use, after 14 months.\",\n  \"rationale\": \"Although no harm occurred in this instance, if the failure to switch on recurs for a patient relying on it for prescribed inhalation therapy, the resulting lack of medication could lead to serious health deterioration.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "might_have_led",
+        "timeLimitDays": 15,
+        "problemDescription": "Nebuliser fails to switch on",
+        "rationale": "Although no harm occurred in this instance, if the failure to switch on recurs for a patient relying on it for prescribed inhalation therapy, the resulting lack of medication could lead to serious health deterioration.",
+        "evidenceQuote": "The nebuliser would not switch on when I checked it before use, after 14 months."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-29",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 15,
+        "difficulty": "ambiguous",
+        "basis": "No harm with saline, but the same over-delivery with a high-alert drug might lead to serious deterioration (criterion B: if it happened again). Conservative under Art. 87(7). 15 days."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"might_have_led\",\"timeLimitDays\":15,\"problemDescription\":\"Infusion pump delivered fluid faster than programmed rate\",\"evidenceQuote\":\"A 1 litre saline bag set for 8 hours finished about an hour early.\",\"rationale\":\"While the patient was unharmed by this saline delivery, an over-infusion could lead to serious deterioration of health if delivering high-risk or critical medications.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "might_have_led",
+        "timeLimitDays": 15,
+        "problemDescription": "Infusion pump delivered fluid faster than programmed rate",
+        "rationale": "While the patient was unharmed by this saline delivery, an over-infusion could lead to serious deterioration of health if delivering high-risk or critical medications.",
+        "evidenceQuote": "A 1 litre saline bag set for 8 hours finished about an hour early."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-30",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "ambiguous",
+        "basis": "Visibly unstable readings prompt distrust rather than false reassurance. Labelled not serious, but a reasonable reviewer could flag it."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Erratic and fluctuating SpO2 readings\",\n  \"evidenceQuote\": \"The reading jumps around a lot, sometimes 88 then 99 a second later.\",\n  \"rationale\": \"An inaccurate or fluctuating pulse oximeter reading could lead to delayed detection and treatment of hypoxia if it recurred in a critical patient, potentially causing serious health deterioration.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "might_have_led",
+        "timeLimitDays": 15,
+        "problemDescription": "Erratic and fluctuating SpO2 readings",
+        "rationale": "An inaccurate or fluctuating pulse oximeter reading could lead to delayed detection and treatment of hypoxia if it recurred in a critical patient, potentially causing serious health deterioration.",
+        "evidenceQuote": "The reading jumps around a lot, sometimes 88 then 99 a second later."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-31",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 10,
+        "difficulty": "ambiguous",
+        "basis": "Device cannot reasonably be excluded (MDCG 2023-3 Q2 criterion C). Latch failure is not in the risk file, so if device-related it is unanticipated: 10 days, the earliest applicable limit."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"serious_deterioration_unanticipated\",\"timeLimitDays\":10,\"problemDescription\":\"Suspected side rail latch failure resulting in a patient fall\",\"evidenceQuote\":\"A resident fell out of bed at night and fractured her hip.\",\"rationale\":\"The incident involved a fractured hip, which constitutes a serious deterioration of health from a harm not anticipated in the risk file.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "serious_deterioration_unanticipated",
+        "timeLimitDays": 10,
+        "problemDescription": "Suspected side rail latch failure resulting in a patient fall",
+        "rationale": "The incident involved a fractured hip, which constitutes a serious deterioration of health from a harm not anticipated in the risk file.",
+        "evidenceQuote": "A resident fell out of bed at night and fractured her hip."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-32",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 10,
+        "difficulty": "ambiguous",
+        "basis": "Unplanned medical treatment counts towards serious deterioration (MDCG 2023-3 Q2). Contamination cannot be excluded. Infection is not an expected side-effect: 10 days. Causality is weak; reasonable reviewers may differ."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"serious_deterioration_unanticipated\",\n  \"timeLimitDays\": 10,\n  \"problemDescription\": \"Wound infection under dressing requiring oral antibiotics\",\n  \"evidenceQuote\": \"The wound under the dressing became infected.\",\n  \"rationale\": \"The patient experienced an infection requiring medical intervention with oral antibiotics to prevent further harm, which is not an anticipated harm in the risk documentation.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "serious_deterioration_unanticipated",
+        "timeLimitDays": 10,
+        "problemDescription": "Wound infection under dressing requiring oral antibiotics",
+        "rationale": "The patient experienced an infection requiring medical intervention with oral antibiotics to prevent further harm, which is not an anticipated harm in the risk documentation.",
+        "evidenceQuote": "The wound under the dressing became infected."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-33",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 15,
+        "difficulty": "ambiguous",
+        "basis": "Emergency treatment for a possibly life-threatening event; reduced output is an anticipated harm. 15 days. Causality uncertain."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"serious_deterioration_anticipated\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Nebuliser failed to mist properly during therapy\",\n  \"evidenceQuote\": \"We went to A&E, he got treatment and came home the same night.\",\n  \"rationale\": \"The device under-dosing due to improper misting led to an acute asthma attack requiring emergency medical intervention, which constitutes an anticipated serious deterioration.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "serious_deterioration_anticipated",
+        "timeLimitDays": 15,
+        "problemDescription": "Nebuliser failed to mist properly during therapy",
+        "rationale": "The device under-dosing due to improper misting led to an acute asthma attack requiring emergency medical intervention, which constitutes an anticipated serious deterioration.",
+        "evidenceQuote": "We went to A&E, he got treatment and came home the same night."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-34",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 10,
+        "difficulty": "ambiguous",
+        "basis": "Alleged death with no verifiable detail. Awareness starts on receipt (MDCG 2023-3 Q15). Uncertain reportability still runs the clock (Art. 87(7)). 10 days pending follow-up."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"death\",\"timeLimitDays\":10,\"problemDescription\":\"Allegation of patient death associated with pump\",\"evidenceQuote\":\"someone wrote that 'these Orrowell pumps killed a patient' at a hospital in their city.\",\"rationale\":\"An allegation of patient death related to the device cannot be excluded without further investigation, necessitating triage as a potential serious incident involving death.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "death",
+        "timeLimitDays": 10,
+        "problemDescription": "Allegation of patient death associated with pump",
+        "rationale": "An allegation of patient death related to the device cannot be excluded without further investigation, necessitating triage as a potential serious incident involving death.",
+        "evidenceQuote": "someone wrote that 'these Orrowell pumps killed a patient' at a hospital in their city."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-35",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "ambiguous",
+        "basis": "Use outside the intended purpose on an animal. No patient, user or other person at risk. Still logged as a complaint."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Inaccurate readings during off-label veterinary use\",\"evidenceQuote\":\"the readings were wildly wrong compared with our veterinary monitor.\",\"rationale\":\"The report alleges a performance deficiency constituting a complaint, but involves off-label animal use with no human harm or risk, so it is not a serious incident under MDR.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Inaccurate readings during off-label veterinary use",
+        "rationale": "The report alleges a performance deficiency constituting a complaint, but involves off-label animal use with no human harm or risk, so it is not a serious incident under MDR.",
+        "evidenceQuote": "the readings were wildly wrong compared with our veterinary monitor."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-36",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 15,
+        "difficulty": "ambiguous",
+        "basis": "Overheating that might lead to fire with an immobile resident. No harm. 15 days."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"might_have_led\",\"timeLimitDays\":15,\"problemDescription\":\"Motor overheating and failure with burning smell\",\"evidenceQuote\":\"There was a burning smell from the bed motor and then it stopped working.\",\"rationale\":\"A burning electrical motor presents a potential fire hazard in a patient care setting that could lead to serious burns or smoke inhalation if it were to recur.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "might_have_led",
+        "timeLimitDays": 15,
+        "problemDescription": "Motor overheating and failure with burning smell",
+        "rationale": "A burning electrical motor presents a potential fire hazard in a patient care setting that could lead to serious burns or smoke inhalation if it were to recur.",
+        "evidenceQuote": "There was a burning smell from the bed motor and then it stopped working."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-37",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "ambiguous",
+        "basis": "The complaint is about care practice, not a device deficiency, and does not link the death to the dressing. A model that flags every death will get this wrong."
+      },
+      "raw": "{\"isComplaint\":false,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Allegation of improper nursing care rather than a device deficiency\",\"evidenceQuote\":\"I want to complain that the staff never changed her dressings properly and left them for days.\",\"rationale\":\"The report alleges clinical neglect by hospice personnel rather than any deficiency in the design, quality, safety, or performance of the wound dressing.\"}",
+      "triage": {
+        "isComplaint": false,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Allegation of improper nursing care rather than a device deficiency",
+        "rationale": "The report alleges clinical neglect by hospice personnel rather than any deficiency in the design, quality, safety, or performance of the wound dressing.",
+        "evidenceQuote": "I want to complain that the staff never changed her dressings properly and left them for days."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-38",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "ambiguous",
+        "basis": "Malfunction at start-up that fails safe, before patient use. Labelled not serious; a cautious reviewer might ask for investigation first."
+      },
+      "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Intermittent error E-17 at start-up preventing pump operation\",\n  \"evidenceQuote\": \"One pump shows error E-17 at start-up now and then.\",\n  \"rationale\": \"The start-up error is a fail-safe malfunction detectable prior to patient connection that caused no harm and does not present a risk of serious deterioration.\"\n}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Intermittent error E-17 at start-up preventing pump operation",
+        "rationale": "The start-up error is a fail-safe malfunction detectable prior to patient connection that caused no harm and does not present a risk of serious deterioration.",
+        "evidenceQuote": "One pump shows error E-17 at start-up now and then."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-39",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "timeLimitDays": null,
+        "difficulty": "ambiguous",
+        "basis": "Minor harm, no professional care. An incident, not serious."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Mask strap caused minor skin sore\",\"evidenceQuote\":\"The mask strap left a small sore on my daughter's cheek after two weeks of nightly use.\",\"rationale\":\"The event involves a minor pressure sore that resolved with basic home care and does not represent a serious deterioration of health.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": false,
+        "seriousOutcome": "none",
+        "timeLimitDays": null,
+        "problemDescription": "Mask strap caused minor skin sore",
+        "rationale": "The event involves a minor pressure sore that resolved with basic home care and does not represent a serious deterioration of health.",
+        "evidenceQuote": "The mask strap left a small sore on my daughter's cheek after two weeks of nightly use."
+      },
+      "error": null
+    },
+    {
+      "id": "EV-40",
+      "difficulty": "ambiguous",
+      "label": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "timeLimitDays": 15,
+        "difficulty": "ambiguous",
+        "basis": "Structural collapse might lead to serious injury. Outcome unknown, so no death or deterioration is established yet: 15 days, to be shortened if follow-up reveals one (MDCG 2023-3 Q14 example)."
+      },
+      "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"might_have_led\",\"timeLimitDays\":15,\"problemDescription\":\"Care bed structural collapse\",\"evidenceQuote\":\"the bed collapsed\",\"rationale\":\"A bed collapse poses an immediate fall risk that could reasonably lead to serious injury or deterioration of health if it recurs.\"}",
+      "triage": {
+        "isComplaint": true,
+        "possibleSeriousIncident": true,
+        "seriousOutcome": "might_have_led",
+        "timeLimitDays": 15,
+        "problemDescription": "Care bed structural collapse",
+        "rationale": "A bed collapse poses an immediate fall risk that could reasonably lead to serious injury or deterioration of health if it recurs.",
+        "evidenceQuote": "the bed collapsed"
+      },
+      "error": null
+    }
+  ],
+  "ciAddedOn": "2026-10-25, computed from the stored counts above; the model was not run again."
+}

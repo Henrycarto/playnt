@@ -80,3 +80,11 @@ describe('computeDeadline', () => {
     expect(viennaDate('2026-10-26T23:30:00Z')).toBe('2026-10-27');
   });
 });
+
+describe('deadline wording', () => {
+  it('abbreviates September as Sep, like every other month', () => {
+    const text = computeDeadline('2026-09-14', 15).explanation.join(' ');
+    expect(text).toContain('Mon 14 Sep');
+    expect(text).not.toContain('Sept');
+  });
+});

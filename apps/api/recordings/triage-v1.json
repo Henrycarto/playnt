@@ -1,0 +1,242 @@
+{
+  "97d07770bdad6da8ee51068bde47c92e38e37f1b377ad096165addf92af1cbf9": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:55:25.736Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"False occlusion alarm sounding repeatedly\",\n  \"evidenceQuote\": \"The occlusion alarm on our IV-220 sounded repeatedly with no occlusion found.\",\n  \"rationale\": \"An unexpected interruption of intravenous infusion in acute or intensive care settings could lead to serious health deterioration if critical medication delivery is disrupted.\"\n}"
+  },
+  "b4b058313d497bd0267a5a7e8efb9d440200d9619c1fb9c1b9f1b79bce5cfba4": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:55:31.089Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Stiff cassette door latch\",\n  \"evidenceQuote\": \"The cassette door latch on the IV-220 is stiff and needs two hands to close.\",\n  \"rationale\": \"While the stiff door latch represents a usability deficiency, the pump operates normally once closed and poses no risk of death or serious deterioration.\"\n}"
+  },
+  "6b59d4f07b3792beb66fc7fb26b7073bd72ef923d618c07e838d49e542a4aead": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:55:38.769Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"False occlusion alarms interrupting infusion\",\n  \"evidenceQuote\": \"False occlusion alarms on two IV-220 pumps, several times per shift.\",\n  \"rationale\": \"Repeated false occlusion alarms interrupt infusion, which could lead to serious deterioration of health if administering critical medications in intensive care.\"\n}"
+  },
+  "39238286e5a589d124cf6f9bfa1bf2d4b571cab5924a3079213fcd945c216e87": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:55:45.740Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Display backlight flickers\",\"evidenceQuote\":\"The IV-220 display backlight flickers in the dark.\",\"rationale\":\"While the flickering backlight represents a performance defect, the display remains readable and does not pose a risk of serious health deterioration or patient harm.\"}"
+  },
+  "71383f006a1fa94cb21c6a91b050ecd5971771a5c30115b64223562d4b1b36e6": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:55:56.252Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"False occlusion alarms causing unexpected infusion interruptions\",\n  \"evidenceQuote\": \"Four IV-220 pumps on our cardiology ward now give false occlusion alarms.\",\n  \"rationale\": \"False occlusion alarms halt drug delivery, which could lead to serious deterioration in patient health under less fortunate circumstances if critical cardiac infusions are interrupted.\"\n}"
+  },
+  "407cfd5973057968733afb9bf069799deb2ee82ff75cff9543cd8ff15b0b5654": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:56:38.180Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Sticking keypad button\",\n  \"evidenceQuote\": \"The 5 key on one IV-220 sticks and has to be pressed twice.\",\n  \"rationale\": \"A sticking key can cause programming errors leading to under- or over-infusion of critical medications, which could reasonably result in serious deterioration of health if the issue recurs and is not caught.\"\n}"
+  },
+  "73d0bc4dfbe73ab17ed409251b43f47ec5277ab4c9203f9fc98529b19f128fe8": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:56:43.175Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Scratched display hard to read in daylight\",\"evidenceQuote\":\"The PX-40 display has scratched after one month and is hard to read in daylight.\",\"rationale\":\"The issue involves cosmetic wear and reduced display legibility in bright light, which does not pose a reasonable risk of death or serious deterioration of health.\"}"
+  },
+  "e4fd4671a88602f93b014a9c1a3dfe0fa75a103aea2c8ef69fa32d2b8393735f": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:56:47.812Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Cracked battery cover\",\"evidenceQuote\":\"The battery cover of my PX-40 cracked the first time I opened it to change the batteries.\",\"rationale\":\"A cracked battery cover is a quality defect that does not present any risk of serious deterioration of health or death.\"}"
+  },
+  "effa6111b6f64d2b5e5e345d1e8c6857c3ba1f07b50ffe21e83245e1aa50feae": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:56:53.740Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Delayed reading stabilization on patients with cold hands\",\"evidenceQuote\":\"Readings on the PX-40 take more than a minute to settle on patients with cold hands.\",\"rationale\":\"A brief delay in obtaining a stable spot-check reading on patients with cold hands does not pose a risk of serious deterioration or death.\"}"
+  },
+  "370d90e62923146ae6c1fec5072e89c29b48ee120c4e18940014051b84101504": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:56:58.212Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Scratched display with poor outdoor visibility\",\n  \"evidenceQuote\": \"The display of my PX-40 scratched within weeks and is hard to see outdoors.\",\n  \"rationale\": \"The issue involves cosmetic durability and usability concerns that did not lead to, nor could reasonably lead to, serious health deterioration or death.\"\n}"
+  },
+  "91a8da6e880efab5c4a7a1b818c0809b35b5decf1bc4d69b8a1e47cccb3e835a": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:57:02.788Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Cracked battery cover causing batteries to fall out\",\n  \"evidenceQuote\": \"battery cover cracked at the hinge and the batteries fall out\",\n  \"rationale\": \"A cracked battery cover preventing device operation during spot-checks is an obvious mechanical failure that does not pose a risk of death or serious deterioration of health.\"\n}"
+  },
+  "c07db56f82ace8f29550fe0cdfd06cd0e92376019c0d19f6a317170175ad9c01": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:57:08.177Z",
+    "raw": "{\"isComplaint\": true, \"possibleSeriousIncident\": true, \"seriousOutcome\": \"might_have_led\", \"timeLimitDays\": 15, \"problemDescription\": \"Falsely high SpO2 reading\", \"evidenceQuote\": \"The PX-40 showed 99 percent on a patient whose bedside monitor showed 86 percent at the same time.\", \"rationale\": \"A falsely elevated SpO2 reading masked hypoxemia, which if it occurred again could delay critical oxygen therapy and lead to serious health deterioration.\"}"
+  },
+  "d039cc4c29d89f08e1603477ce0bf936ccb0d074c06c2fdc06b34c7c982574fc": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:57:25.213Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Cracked handset cable\",\n  \"evidenceQuote\": \"The HB-7 handset cable has cracked where it enters the handset.\",\n  \"rationale\": \"A damaged handset cable could cause uncommanded bed movement, which presents a risk of serious deterioration or injury if it occurs.\"\n}"
+  },
+  "65efcbb25d20ba0f24cd23df55c57a069714744fa6e8a6770392d84511915053": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:57:29.211Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Noisy motor during head-end elevation\",\n  \"evidenceQuote\": \"The HB-7 motor is noisy when raising the head end.\",\n  \"rationale\": \"A noisy motor that remains functional poses no risk of serious deterioration in health, death, or public health threat.\"\n}"
+  },
+  "ab6823bb3238d6bb910d0f98461c3abc18ac1bde531fb83df1d855d002417aa2": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:57:34.135Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"might_have_led\",\"timeLimitDays\":15,\"problemDescription\":\"Castor brakes failing to hold during patient transfers\",\"evidenceQuote\":\"The bed rolls when staff lean on it during transfers.\",\"rationale\":\"Unexpected movement of the bed during patient transfers poses a fall risk that could result in serious patient injury or hospitalisation if it recurs.\"}"
+  },
+  "83fb39552b2af961cb0a1a61938c91885e54106e1d4f11bb94bbf91f892e5c58": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:57:44.492Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Handset cables split near plug\",\n  \"evidenceQuote\": \"The handset cables on two HB-7 beds have split near the plug.\",\n  \"rationale\": \"A damaged handset cable could cause uncommanded bed movement, which might lead to serious injury or deterioration of health if it occurs.\"\n}"
+  },
+  "4c30efb50a3136ef616fdc2e290581af31748b6c5d84cc5b325f81881f217308": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:57:50.493Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Uncommanded bed lowering due to crushed handset cable\",\n  \"evidenceQuote\": \"An HB-7 bed lowered itself by about 10 cm overnight.\",\n  \"rationale\": \"Although the resident was unhurt, uncommanded movement could lead to serious injury such as falls or entrapment if it were to recur.\"\n}"
+  },
+  "21fc71707205513eed02b386b38df94dcde8fe03ac849414f8eceeab3c9a3bc3": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:57:56.855Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Dressing coming loose at edges on sacrum\",\"evidenceQuote\":\"WD-12 dressings come loose at the edges after a day on the sacrum.\",\"rationale\":\"Poor adhesion at the dressing edge is a product performance issue that does not carry a risk of death or serious deterioration of health.\"}"
+  },
+  "2c8866ae50a8f06975f0ea0b248ecad2cf5677c6bfdeeb2634be8355de1e1901": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:58:01.214Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Mild skin redness around wound\",\n  \"evidenceQuote\": \"Mild redness around the wound after a week of WD-12, gone two days after we stopped.\",\n  \"rationale\": \"The reported mild redness is a documented expected side-effect that resolved without medical intervention and does not constitute a serious deterioration of health.\"\n}"
+  },
+  "780dd6f5732e65815da91756a9d4d21d95510eb834260e53fa7bf7b45ea05085": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:58:06.823Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Dressing edges roll up\",\n  \"evidenceQuote\": \"WD-12 dressing edges roll up on heel wounds within a few hours.\",\n  \"rationale\": \"The dressing edges rolling up represents a performance deficiency that caused no patient harm and is not reasonably likely to lead to serious deterioration of health.\"\n}"
+  },
+  "0f70607959f4ae7e00738cf859a64ef83335b5d50135bff42fc503e4bfe113d0": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:58:11.573Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Mild skin irritation under dressing\",\"evidenceQuote\":\"Mild skin irritation under the WD-12 on two residents.\",\"rationale\":\"The reported mild skin irritation is an expected, non-serious side-effect that resolved without leading to serious deterioration.\"}"
+  },
+  "55fa94e2b63f78d2af73248fd6e7a5e981560a54e2ca484b8a0ab29ae08676fa": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:58:16.853Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Adhesive border loses adhesion after showering\",\"evidenceQuote\":\"The WD-12 adhesive border loses its grip after showering, so the dressing has to be changed every day.\",\"rationale\":\"Premature loss of adhesion after showering necessitates more frequent dressing changes but does not pose a risk of serious deterioration in health or death.\"}"
+  },
+  "11ff006a3bd4e6db9d5c6bc7f0d171105f4b5ca2886f09a619f401d1d13cf958": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:58:32.055Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Peel tab tears causing touch contamination of dressing wound side\",\n  \"evidenceQuote\": \"The WD-12 peel tab tears off before the liner comes away, so staff end up touching the wound side of the dressing.\",\n  \"rationale\": \"Premature detachment of the peel tab leads to touch contamination of the wound-contact surface, which could result in a serious wound infection requiring medical intervention.\"\n}"
+  },
+  "06f2bb06c3fbe0df0499a7f06b659d00a0d768eb74808b92ee03e87c2973983f": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:58:36.737Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Mouthpiece discolouration after cleaning\",\n  \"evidenceQuote\": \"My NB-3 mouthpiece faded from blue to grey after cleaning it as the leaflet says.\",\n  \"rationale\": \"The report alleges a cosmetic quality deficiency following recommended cleaning instructions with no harm or risk of serious deterioration to the user.\"\n}"
+  },
+  "ca8162a9ef1302885c9f2ef88997d5806d01e00b918438573aa54876047e1baf": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:58:47.056Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Increased nebulisation treatment time due to mesh degradation\",\n  \"evidenceQuote\": \"After three months each NB-3 treatment takes twice as long as when it was new, even though we clean the mesh as instructed.\",\n  \"rationale\": \"The reported prolonged treatment time indicates a performance deterioration without causing or creating a realistic risk of serious deterioration in health.\"\n}"
+  },
+  "dcad0ce1e5007c9bc65adc5f540a396175783737f9d82086f428d13c71d5b884": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:58:54.174Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": false,\n  \"seriousOutcome\": \"none\",\n  \"timeLimitDays\": null,\n  \"problemDescription\": \"Charging cable stopped working\",\n  \"evidenceQuote\": \"The NB-3 charging cable stopped working after a month.\",\n  \"rationale\": \"A failed charging cable represents a device malfunction but does not pose a reasonable risk of death or serious deterioration of health.\"\n}"
+  },
+  "a9ee767bbcb1e342b0062340318e88615bbb0b38024f835fbb3a09a20a408559": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:59:17.711Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Reduced aerosol mist output\",\n  \"evidenceQuote\": \"The NB-3 mist is weak after two months.\",\n  \"rationale\": \"The device exhibited reduced aerosol output that can lead to under-dosing of prescribed medication, which if it recurred could reasonably lead to serious respiratory deterioration.\"\n}"
+  },
+  "70197c64a2c277caede744874ea6992289ce79bca32448dcfb73f036162f107f": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:59:21.681Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Broken zip on carry case\",\"evidenceQuote\":\"The zip on the NB-3 carry case broke.\",\"rationale\":\"A broken zipper on an accessory carry case does not pose any risk of serious injury or deterioration of health.\"}"
+  },
+  "b594da48fd01f34ec0beea9089a0c5917b40d8722a70253bff841e1b961afa92": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:59:27.306Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"serious_deterioration_unanticipated\",\n  \"timeLimitDays\": 10,\n  \"problemDescription\": \"Severe infection requiring hospital admission\",\n  \"evidenceQuote\": \"The GP admitted him to hospital for intravenous antibiotics.\",\n  \"rationale\": \"The patient experienced an unanticipated infection requiring hospitalisation, meeting the criteria for a serious deterioration of health.\"\n}"
+  },
+  "2cc2f8aa7c54b356e53847d3156b8570ecd5e8a673d6cb9fd3d59a11534c3f80": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:59:32.424Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"death\",\n  \"timeLimitDays\": 10,\n  \"problemDescription\": \"End-of-infusion alarm failed to sound\",\n  \"evidenceQuote\": \"The patient's blood pressure dropped, he went into cardiac arrest and could not be resuscitated.\",\n  \"rationale\": \"A failure of the end-of-infusion alarm during a critical noradrenaline infusion directly preceded cardiac arrest and patient death, indicating a fatal serious incident.\"\n}"
+  },
+  "e425c8dce9637d4ed6dc73217e844cbdf9fa97ca0cd5eec174f2c99f07a88463": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:59:37.097Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"broken lanyard eyelet\",\"evidenceQuote\":\"The lanyard eyelet on the PX-40 snapped after two weeks.\",\"rationale\":\"A broken lanyard eyelet is a product durability issue that poses no risk of serious injury or deterioration of health.\"}"
+  },
+  "e635a8198cc6beb25c1bbade1ba461de6e56a124973a343449e041363c2b976f": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:59:42.461Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Side rail latch unlatched under resident pressure\",\n  \"evidenceQuote\": \"The side rail latch on an HB-7 bed released when the resident leaned against it during the night.\",\n  \"rationale\": \"The failure of the side rail latch could have resulted in a fall leading to serious injury or hospitalisation had the carer not been present to intervene.\"\n}"
+  },
+  "73e17e5a54f2c67b918c7a9b31f5704f407f9bb0ce6680244937b7356db829da": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:59:47.657Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"might_have_led\",\n  \"timeLimitDays\": 15,\n  \"problemDescription\": \"Keypad misregistering programmed infusion rate tenfold\",\n  \"evidenceQuote\": \"During programming the IV-220 keypad registered 50 mL/h as 500 mL/h.\",\n  \"rationale\": \"Although caught before infusion began, a tenfold over-infusion could lead to death or serious deterioration of health if the malfunction recurred undetected.\"\n}"
+  },
+  "187f2b4971a0968e2686872279384362289f221e90897b96aa6a723079bc17f9": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:59:53.111Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Charging indicator light remains orange when full\",\"evidenceQuote\":\"The charging light on my NB-3 stays orange even when the battery is full.\",\"rationale\":\"This is a minor cosmetic or indicator malfunction that does not affect therapy delivery or present any risk of serious deterioration in health.\"}"
+  },
+  "a395eb6cab3d043d6af674f74881ff01e30cd9f8d44f51775acc6c6f096d0457": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T08:59:58.859Z",
+    "raw": "{\n  \"isComplaint\": true,\n  \"possibleSeriousIncident\": true,\n  \"seriousOutcome\": \"serious_deterioration_unanticipated\",\n  \"timeLimitDays\": 10,\n  \"problemDescription\": \"Medication reservoir cracking at seam causing chemical eye exposure\",\n  \"evidenceQuote\": \"Two users had the solution in their eyes and needed eye irrigation at A&E.\",\n  \"rationale\": \"Leaking medication required emergency medical intervention at A&E to treat or prevent eye injury, representing an unanticipated serious deterioration of health.\"\n}"
+  },
+  "d286744d39d6b245234229451485d800c53b96383ef3dea39fc7754af9ba9348": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T09:00:05.264Z",
+    "raw": "{\"isComplaint\":false,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Inquiry regarding warranty coverage for a lost handset holder\",\"evidenceQuote\":\"Does the warranty on the HB-7 cover a replacement holder for the handset?\",\"rationale\":\"The communication is a warranty inquiry regarding a part lost during a move rather than an allegation of any device deficiency.\"}"
+  },
+  "0e39b49b4d91d526e6a7ba00d7129f48f0628f6a171ce9c9afb513eaaa648d09": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T09:00:18.497Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"might_have_led\",\"timeLimitDays\":15,\"problemDescription\":\"Pump failed to stop infusing after stop button pressed\",\"evidenceQuote\":\"The IV-220 kept running for about 15 minutes after I pressed stop.\",\"rationale\":\"The device continued delivering medication after the operator attempted to stop it, resulting in an accidental potassium chloride over-infusion that could have led to a life-threatening cardiac event.\"}"
+  },
+  "182b3d749a1e30c0aebff1dce2c4d83eb95822ba577cceb48eb57d9e245cacba": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T09:00:21.944Z",
+    "raw": "{\"isComplaint\":false,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Request for replacement user manual in German\",\"evidenceQuote\":\"Could you send me the PX-40 user manual in German?\",\"rationale\":\"This is an administrative request for documentation rather than an allegation of a device deficiency or performance failure.\"}"
+  },
+  "ad565482ab0efaa111542999f6d46e1995c771933cd0ac1bf7c9650f8b11f3b2": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T09:00:25.743Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":false,\"seriousOutcome\":\"none\",\"timeLimitDays\":null,\"problemDescription\":\"Clicking noise when raising head section\",\"evidenceQuote\":\"The HB-7 head section makes a clicking noise when it is raised.\",\"rationale\":\"The clicking noise indicates a potential quality defect but poses no risk of death or serious deterioration of health.\"}"
+  },
+  "b054364248f3d574f37a104925585cdf987fd8bcb223685e3b871a03ccd149b7": {
+    "model": "gemini-3.8-flash",
+    "promptVersion": "triage-v1",
+    "recordedAt": "2026-10-25T09:14:24.294Z",
+    "raw": "{\"isComplaint\":true,\"possibleSeriousIncident\":true,\"seriousOutcome\":\"might_have_led\",\"timeLimitDays\":15,\"problemDescription\":\"False occlusion alarm causing infusion interruption\",\"evidenceQuote\":\"The occlusion alarm on one IV-220 went off twice during the night shift with no occlusion in the line.\",\"rationale\":\"Although no patient harm occurred because staff promptly restarted the pump, unexpected cessation of infusion due to false occlusion alarms could lead to serious deterioration if it recurs during the delivery of critical life-sustaining medications in intensive care.\"}"
+  }
+}

@@ -108,7 +108,7 @@ export interface Deadline {
 }
 
 const fmt = (day: string) =>
-  new Date(parseDay(day)).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }).replace(',', '');
+  new Date(parseDay(day)).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }).replace(',', '').replace('Sept', 'Sep'); // en-GB writes "Sept"
 
 export function computeDeadline(awarenessDate: string, limitDays: LimitDays): Deadline {
   const start = parseDay(awarenessDate);

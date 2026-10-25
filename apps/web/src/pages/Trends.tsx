@@ -1,10 +1,13 @@
 import { Fragment, useState } from 'react';
 import { api } from '../api';
 import { Term } from '../components/Term';
+import { capFirst } from '../components/Status';
 import { useLoad, useTitle } from '../hooks';
 
 const MONTHS = ['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06', '2026-07', '2026-08', '2026-09', '2026-10', '2026-11', '2026-12'];
-const monthName = (m: string) => new Date(`${m}-01T00:00:00Z`).toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' });
+// Fixed three-letter months: en-GB in current browsers writes September as "Sept".
+const MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const monthName = (m: string) => MONTH_ABBR[Number(m.slice(5, 7)) - 1]!;
 
 export function Trends() {
   useTitle('Trends');
@@ -67,7 +70,7 @@ export function Trends() {
                 <Fragment key={m}>
                   {list.map((r, i) => (
                     <tr key={`${m}-${r.deviceRef}-${r.problem}`}>
-                      <td>{i === 0 ? `${monthName(m)} ${m.slice(0, 4)}` : ''}</td><td>{r.deviceRef}</td><td>{r.problem}</td><td className="num">{r.count}</td><td className="num">{r.possibleSerious || ''}</td>
+                      <td>{i === 0 ? `${monthName(m)} ${m.slice(0, 4)}` : ''}</td><td>{r.deviceRef}</td><td>{capFirst(r.problem)}</td><td className="num">{r.count}</td><td className="num">{r.possibleSerious || ''}</td>
                     </tr>
                   ))}
                 </Fragment>

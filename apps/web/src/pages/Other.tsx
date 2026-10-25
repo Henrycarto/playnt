@@ -4,7 +4,7 @@ import { GLOSSARY, SOURCES } from '@playnt/shared';
 import { api } from '../api';
 import { useLoad, useTitle } from '../hooks';
 
-const stamp = (iso: string) => new Date(iso).toLocaleString('en-GB', { timeZone: 'Europe/Vienna', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', '');
+const stamp = (iso: string) => new Date(iso).toLocaleString('en-GB', { timeZone: 'Europe/Vienna', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', '').replace('Sept', 'Sep');
 
 export function AuditPage() {
   useTitle('Audit trail');

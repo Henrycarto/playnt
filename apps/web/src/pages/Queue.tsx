@@ -8,6 +8,7 @@ import { DueCell, Flag, fmtDay, TriageStatus } from '../components/Status';
 import { useHealth, useLoad, useTitle } from '../hooks';
 
 const STATUS_FILTERS = [
+  ['action', 'Needs action'],
   ['waiting', 'Waiting for a decision'],
   ['needs_manual_triage', 'Needs manual triage'],
   ['decided', 'Decided'],
@@ -19,7 +20,7 @@ export const isWaiting = (c: ComplaintSummary) => c.status === 'suggested' || c.
 export function Queue() {
   useTitle('Complaint queue');
   const [params, setParams] = useSearchParams();
-  const status = params.get('status') ?? 'waiting';
+  const status = params.get('status') ?? 'action';
   const device = params.get('device') ?? '';
   const serious = params.get('serious') === 'true';
   const navigate = useNavigate();
@@ -92,7 +93,8 @@ export function Queue() {
 
   const waitingCount = data.filter(isWaiting).length;
   const seriousCount = data.filter((c) => c.possibleSeriousIncident).length;
-  const filtered = status !== 'waiting' || device || serious;
+  const reportsDue = data.filter((c) => c.possibleSeriousIncident && c.dueAt && !c.reportedOn && c.deadlineBasis === 'decided').length;
+  const filtered = status !== 'action' || device || serious;
 
   return (
     <>
@@ -101,7 +103,9 @@ export function Queue() {
           <h1>Complaint queue</h1>
           <p className="sub" style={{ margin: 0 }}>
             {list.state === 'ready'
-              ? `${data.length} shown, ${waitingCount} waiting for a decision, ${seriousCount} flagged as possible serious incidents. Nearest deadline first.`
+              ? status === 'action'
+                ? `${waitingCount} waiting for a decision, ${reportsDue} serious incident ${reportsDue === 1 ? 'report' : 'reports'} not yet recorded. Nearest deadline first.`
+                : `${data.length} shown, ${waitingCount} waiting for a decision, ${seriousCount} flagged as possible serious incidents. Nearest deadline first.`
               : 'Loading complaints'}
           </p>
         </div>
@@ -112,7 +116,7 @@ export function Queue() {
       <div className="filters" role="group" aria-label="Filter the queue">
         <span className="fgroup"><span className="glabel" id="f-status">Triage</span>
           <span className="chips" role="group" aria-labelledby="f-status">
-            {STATUS_FILTERS.map(([v, l]) => <button key={v} type="button" className="fchip" aria-pressed={status === v} onClick={() => set('status', v === 'waiting' ? null : v)}>{l}</button>)}
+            {STATUS_FILTERS.map(([v, l]) => <button key={v} type="button" className="fchip" aria-pressed={status === v} onClick={() => set('status', v === 'action' ? null : v)}>{l}</button>)}
           </span>
         </span>
         <span className="fgroup"><span className="glabel" id="f-device">Device</span>
@@ -121,7 +125,7 @@ export function Queue() {
             {devices.state === 'ready' && devices.data.map((d) => <button key={d.id} type="button" className="fchip" aria-pressed={device === d.id} onClick={() => set('device', d.id)} title={d.name}>{d.ref}</button>)}
           </span>
         </span>
-        <button type="button" className="fchip" aria-pressed={serious} onClick={() => set('serious', serious ? null : 'true')}>Possible serious incidents only</button>
+        <button type="button" className="fchip push" aria-pressed={serious} onClick={() => set('serious', serious ? null : 'true')}>Possible serious incidents only</button>
       </div>
 
       <table className="queue" aria-describedby="queue-help">
@@ -167,7 +171,7 @@ export function Queue() {
         <div className="panel empty" style={{ borderTop: 0, borderRadius: '0 0 6px 6px' }}>
           {filtered
             ? <><strong>No complaints match these filters.</strong><button type="button" className="btn" style={{ marginTop: 12 }} onClick={() => setParams(new URLSearchParams(), { replace: true })}>Clear filters</button></>
-            : <><strong>Nothing waiting. New complaints appear here.</strong>Log a complaint as it comes in; the model suggests a triage and you confirm or correct it. <div style={{ marginTop: 12 }}><Link className="btn" to="/new">Log complaint</Link></div></>}
+            : <><strong>Nothing needs action. New complaints appear here.</strong>Every triage is decided and every possible serious incident has a recorded report. Log a complaint as it comes in; the model suggests a triage and you confirm or correct it. <div style={{ marginTop: 12 }}><Link className="btn" to="/new">Log complaint</Link></div></>}
         </div>
       )}
       {list.state === 'error' && (

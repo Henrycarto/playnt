@@ -2,11 +2,11 @@ import { expect, test } from '@playwright/test';
 import { expectNoAxeViolations, logSample } from './helpers';
 
 test.describe('complaint queue', () => {
-  test('lists waiting complaints with deadlines and flags, and is axe-clean', async ({ page }) => {
+  test('lists complaints that need action with deadlines and flags, and is axe-clean', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('heading', { name: 'Complaint queue' })).toBeVisible();
     await expect(page.locator('tbody tr:not(.skel)').first()).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Waiting for a decision' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('button', { name: 'Needs action' })).toHaveAttribute('aria-pressed', 'true');
     // The flag is readable text with an icon, not colour alone.
     await expect(page.locator('tbody').getByText('Possible serious incident').first()).toBeVisible();
     await expectNoAxeViolations(page);
@@ -36,6 +36,8 @@ test.describe('complaint queue', () => {
     await expect(rows.nth(1)).toBeFocused();
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/\/complaints\//);
+    // The URL changes before the complaint screen mounts its key handler; wait for the screen itself.
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/^PLT-2026-\d{4}$/);
     await page.keyboard.press('Escape');
     await expect(page).toHaveURL(/\/$/);
   });
