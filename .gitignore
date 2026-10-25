@@ -12,3 +12,6 @@ blob-report/
 .cache/
 *.tsbuildinfo
 .vercel/
+
+# Private interview notes
+INTERVIEW_NOTES.md
