@@ -93,7 +93,7 @@ The full research notes are in [`docs/phase-1-research.md`](docs/phase-1-researc
 
 - **`complaints` embeds its triage history.** Each model suggestion and each human decision is an element of `triageHistory`. They belong to one complaint, are never shared, and the complaint screen always reads them together, so one document read serves the whole screen. The current triage and the deadline are kept as fields next to the history so the queue can sort and filter without unwinding arrays.
 - **`devices` is referenced, not embedded.** A device's risk file is shared by many complaints and changes on its own schedule. The model prompt reads it at triage time.
-- **`auditEvents` is its own append-only collection.** One event per intake, suggestion, rejected output, decision and report, with a per-complaint sequence number and the hash of the previous event. Editing or deleting an event breaks the chain, and the audit page shows where. The API has no update or delete path for it, and `npm run db:setup` creates an application user that may only `find` and `insert` on this collection, so the guarantee does not rest on application code alone.
+- **`auditEvents` is its own append-only collection.** One event per intake, suggestion, rejected output, decision and report, with a per-complaint sequence number and the hash of the previous event. Editing or deleting an event breaks the chain, and the audit page shows where. The API has no update or delete path for it, and `npm run db:setup` creates an application user that may only `find` and `insert` on this collection, so the guarantee does not rest on application code alone. The hosted demo keeps the same guarantee: MongoDB Atlas supports custom database roles on its free M0 tier, so the hosted app connects as a user whose only role grants `find` and `insert` on `auditEvents` (see [Hosted demo](#hosted-demo)).
 - **Indexes follow the screens.** `{ status: 1, "deadline.dueAt": 1 }` for the queue, `{ deviceId: 1, awarenessDate: -1 }` for trends, `{ complaintId: 1, seq: 1 }` unique for the audit chain, plus unique complaint and device references.
 - **Validation in two places.** JSON Schema validators on every collection, and Zod at the API boundary. The model's output is validated too: anything that does not parse, or whose evidence quote is not an exact substring of the complaint, is stored raw and the complaint goes to manual triage. It is never repaired.
 - **Trends are one aggregation pipeline:** match decided triage in the date range, group by device, problem and month (`$dateTrunc` in Vienna time), look up device names.
@@ -122,6 +122,21 @@ TRIAGE_PROVIDER=gemini npm run dev
 Other scripts: `npm run record` records model responses for new seed or sample texts; `npm test` runs the Vitest unit and API tests on mongodb-memory-server; `npm run test:e2e` runs the Playwright browser tests in light and dark mode with axe accessibility checks.
 
 Only the complaint text and the fictional device's risk file are sent to the model. The reporter's role and country are not.
+
+## Hosted demo
+
+The hosted demo is one Vercel project: the web app as static files and the whole Express API as one Vercel Function in Frankfurt (`fra1`), entered through [`api/index.ts`](api/index.ts), which reuses one app and one MongoDB client per function instance ([`apps/api/src/handler.ts`](apps/api/src/handler.ts)). The data lives on a MongoDB Atlas M0 cluster. It runs in demo mode: recorded model responses, the clock fixed at 25 October 2026, 10:00 Vienna, and no Gemini key anywhere in production.
+
+Visitors can log, confirm and correct complaints, so the database drifts. A [nightly GitHub Action](.github/workflows/reseed.yml) drops it and loads the seeded story again.
+
+Two Atlas database users, because Atlas applies the highest permission among a user's roles:
+
+| User | Used by | Roles |
+| --- | --- | --- |
+| `playnt_app` | Vercel, `MONGODB_URI` | Only the custom role `playntApp`: `find`, `insert`, `update` on `devices`, `complaints` and `counters`; `find` and `insert` on `auditEvents` |
+| `playnt_seed` | GitHub Actions secret `MONGODB_URI` | `readWrite` and `dbAdmin` on `playnt`, to drop the database and recreate validators and indexes |
+
+Atlas only accepts custom roles created in the Atlas UI, the Atlas CLI or the Admin API; a role created with the `createRole` command, as `npm run db:setup` does locally, is rolled back. The `playntApp` role is therefore created in Atlas with the same privileges as [`setupAppRole`](apps/api/src/db.ts).
 
 ## What is simplified
 

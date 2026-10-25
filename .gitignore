@@ -11,3 +11,4 @@ blob-report/
 .mongo-data/
 .cache/
 *.tsbuildinfo
+.vercel/
