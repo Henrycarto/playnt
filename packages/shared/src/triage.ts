@@ -48,13 +48,9 @@ const triageFields = {
 
 export type TriageIssue = { path: string; message: string };
 
-// Rules that hold for every triage, from the model or from a person.
-export function triageConsistency(t: {
-  isComplaint: boolean;
-  possibleSeriousIncident: boolean;
-  seriousOutcome: SeriousOutcome;
-  timeLimitDays: LimitDays | null;
-}): TriageIssue[] {
+// Rules that hold for every triage, from the model or from a person. The argument type comes from the
+// schemas, so it matches what callers hold under any compiler settings (Vercel's builder checks non-strict).
+export function triageConsistency(t: Pick<ModelTriage | HumanTriage, 'isComplaint' | 'possibleSeriousIncident' | 'seriousOutcome' | 'timeLimitDays'>): TriageIssue[] {
   const issues: TriageIssue[] = [];
   if (!t.isComplaint && t.possibleSeriousIncident) {
     issues.push({ path: 'possibleSeriousIncident', message: 'A communication that is not a complaint cannot be a possible serious incident.' });
@@ -86,9 +82,11 @@ export const DecisionInputSchema = z.discriminatedUnion('action', [
 ]);
 export type DecisionInput = z.infer<typeof DecisionInputSchema>;
 
+// Each variant names the other's field as undefined, so result.error and result.triage can be read
+// without narrowing first; narrowing on ok still works under strict settings.
 export type ParseResult =
-  | { ok: true; triage: ModelTriage }
-  | { ok: false; error: string };
+  | { ok: true; triage: ModelTriage; error?: undefined }
+  | { ok: false; error: string; triage?: undefined };
 
 // Parse raw model output. Anything that is not exactly right is rejected, never repaired.
 export function parseModelOutput(raw: string, complaintText: string): ParseResult {
